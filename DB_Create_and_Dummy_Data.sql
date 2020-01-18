@@ -24,7 +24,7 @@ create table contents_tb(
 	user_no int,
     category_no int,
     write_dt datetime,
-    view_cnt int,
+    view_cnt int default 0,
     foreign key (user_no) references user_tb(user_no) on delete cascade,
     foreign key (category_no) references category_tb(category_no) on delete cascade
 )default charset = utf8;
