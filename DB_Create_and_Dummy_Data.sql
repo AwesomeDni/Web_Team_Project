@@ -1,5 +1,5 @@
 ##DB 생성
-create database web_project default charset = utf8 collate utf8_general_ci ;
+create database web_project default character set= utf8 collate utf8_general_ci ;
 use web_project;
 
 ##회원 테이블
