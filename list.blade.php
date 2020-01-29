@@ -5,29 +5,32 @@
 </head>
 <body>
     <h1>게시글</h1>
-    <?php //DB conn 소스 불러오기
-        require('db_conn.php') ?>
     <?php 
-    //쿼리문 작성
-    $query = "select * from show_view";
-    //쿼리보내고 결과를 변수에 저장
-    $result = mysqli_query($conn,$query);
+    require_once('db_conn.php');
+    $pdo = DB_conn();
+    
+    try{
+        //쿼리문 작성
+        $query = "select content_no,title from show_view";
+        $stmh=$pdo->prepare($query); //sql문을 인잭션으로 부터 보호하기위한 처리
+        $stmh->execute();
+    }
+    catch(PDOException $e){
+        print 'err: '. $e->getMessage();
+    }
     ?>
+
     <table border=1>
         <tr>
-            <td>글번호</td><td>제목</td><td>작성자</td><td>작성일</td><td>조회수</td>
+            <td>글번호</td><td>제목</td>
         </tr>
     <?php
     
-    while($row = mysqli_fetch_array($result)){
-        print "<tr><td>" . $row['content_no'] . "</td>
-            <td><a href='show'>" . $row['title'] . "</a></td>
-            <td>" . $row['id'] . "</td>
-            <td>" . $row['write_dt'] . "</td>
-            <td>" . $row['view_cnt'] . "</td></tr>";
+    while($row=$stmh->fetch(PDO::FETCH_ASSOC)){
+        print "<tr><td>" . $row['content_no'] . "</td><td><a href='show.php?id=". $row['content_no'] ."'>" . $row['title'] . "</a></td></tr>";
     }
     ?>
     </table>
-    <button onclick="location.href='insert'">글쓰기</button>
+    <button onclick="location.href='insert.php'">글쓰기</button>
 </body>
 </html>

@@ -5,7 +5,7 @@ function DB_conn()
 {
     $db_type="mysql";
     $db_host="localhost";
-    $db_name="teampj";
+    $db_name="web_project";
     $db_user="root";
     $db_pass="password";
 
