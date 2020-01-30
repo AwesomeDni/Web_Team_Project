@@ -12,7 +12,7 @@ session_start();
 $_SESSION['user_no'] = 1;
 $_SESSION['category_no'] = 1;
 ?>
-    <form action="post">
+    <form method="POST" action="post">
         제목: <input type="text" name="title"><br>
         내용: <textarea name="content"></textarea>
         <input type="submit" value="확인">
