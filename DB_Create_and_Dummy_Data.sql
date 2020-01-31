@@ -7,7 +7,8 @@ create table user_tb(
 	user_no int primary key auto_increment,
     id varchar(20) not null unique,
     pw varchar(20) not null,
-    email varchar(20) not null unique
+    email varchar(20) not null unique,
+    user_name varchar(20) not null unique
 )default charset = utf8;
 
 ##카테고리 테이블
@@ -41,9 +42,9 @@ create table coments_tb(
 )default charset = utf8;
 
 ##회원 테이블 더미 데이터
-insert into user_tb(id,pw,email) values('abc','111','abc@a.com');
-insert into user_tb(id,pw,email) values('php','222','php@php.com');
-insert into user_tb(id,pw,email) values('java','333','java@java.com');
+insert into user_tb(id,pw,email,user_name) values('abc','111','abc@a.com','herry');
+insert into user_tb(id,pw,email,user_name) values('php','222','php@php.com','hermione');
+insert into user_tb(id,pw,email,user_name) values('java','333','java@java.com','ronald');
 
 ##카테고리 테이블 더미 데이터
 insert into category_tb(category_nm) values('romance');
