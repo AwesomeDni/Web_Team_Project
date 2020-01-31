@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> 회원가입 </title>
+<meta http-equiv="content-type" content="txt/html" ; charset="utf-8">
+<style>
+    body { text-align: center;}
+    div { padding: 10px;}
+</style>
+</head>
+<body>
+    <h2>Join Page</h2>
+    <hr>
+    <!--join.php는 회원가입 시 필터를 위한것 : 비번 재확인, 빈칸여부확인, 아이디중복-->
+    <form name="join_form" method="POST" action="join.php">
+        <div>
+            <label for="id"> ID </label>
+            <input type="text" name="id" placeholder="아이디">
+        </div>
+        <div>
+            <label for="pw"> PW </label>
+            <input type="password" name="pw" placeholder="패스워드">
+        </div>
+        <div>
+            <label for="pwc"> PWC </label>
+            <input type="password" name="pwc" placeholder="패스워드 재확인">
+
+        </div>
+        <div>
+            <label for="name" > Name </label>
+            <input type="text" name="name" placeholder="이름"s>
+        </div>
+        <div>
+            <label for="email"> E-mail </label>
+            <input type="email" name="email"  placeholder="이메일">
+        </div>
+        <input type="submit" value="회원가입">
+        <input type="reset" value="취소">
+    </form>
+</body>
+</html>
