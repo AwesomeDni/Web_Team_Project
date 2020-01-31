@@ -8,7 +8,7 @@ create table user_tb(
     id varchar(20) not null unique,
     pw varchar(20) not null,
     email varchar(20) not null unique,
-    user_name varchar(20) not null unique
+    user_name varchar(20) not null
 )default charset = utf8;
 
 ##카테고리 테이블
