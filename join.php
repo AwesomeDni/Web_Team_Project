@@ -1,54 +1,69 @@
 <?php
+
 $id=$_POST['id'];
 $pw=$_POST['pw'];
 $pwc=$_POST['pwc'];
-$name=$_POST['name'];
 $email=$_POST['email'];
 
-$servername="localhost";
-$username="root";
-$password="1111";
-$dbname="project";
+require_once("db_conn.php");
+$pdo=DB_conn();
 
-//비밀번호와 비밀번호 재확인이 같지 않은 경우
+#비밀번호와 비밀번호 재확인이 같지 않은 경우
 if($pw != $pwc){
     print "비밀번호와 비밀번호 재확인이 일치하지 않습니다.";
     print "<a href=join.html>돌아가기</a>";
     exit();
 }
-
-//빈칸이 있을 경우
-if($id==NULL || $pw==NULL || $name == NULL || $email==NULL){ 
+#빈칸이 있을 경우
+if($id==NULL || $pw==NULL || $email==NULL){ 
     print "빈 칸을 모두 채워주세요.";
     print "<a href=join.html>돌아가기</a>";
     exit();
 }
 
-//데이터베이스 연결문
-$conn=mysqli_connect($servername,$username,$password,$dbname);
-
-//아이디 중복 있는지 select통해 찾음
-$check="select *from user where id='$id'";
-
-//sql문 연결해서 결과에 담음
-$result=$conn->query($check);
-
-if(!$result){
-    trigger_error('invalid 쿼리 : '. $conn->error);
+#아이디 중복확인
+try{
+    $sql="SELECT * FROM user_tb where id=:id";
+    $stmh=$pdo->prepare($sql);
+    $stmh->bindValue(':id',$id,PDO::PARAM_STR);
+    $stmh->execute();
+    $countID=$stmh->rowCount();
+}catch(PDOException $Exception){
+   print 'error:'.$Exception->getMessage();
 }
 
-//sql문 실행 결과가 있다면 중복이 있는것!
-if($result->num_rows == 1){
-    print "중복된 id입니다.";
-    print "<a href=join.html>돌아가기</a>";
-    exit();
+#이메일 중복확인
+try{
+    $sql="SELECT * FROM user_tb WHERE email=:email";
+    $stmh=$pdo->prepare($sql);
+    $stmh->bindValue(':email',$email,PDO::PARAM_STR);
+    $stmh->execute();
+    $countEmail=$stmh->rowCount();
+}catch(PDOException $Exception){
+   print 'error:'.$Exception->getMessage();
+} 
+
+if($countID){
+    print "중복되는 아이디입니다.";
+}else if($countEmail){
+    print "중복되는 이메일입니다.";
+}else{
+    try{
+        $pdo->beginTransaction();
+        $sql="INSERT INTO user_tb (id,pw,email) VALUES (:id,:pw,:email)";
+        $stmh=$pdo->prepare($sql);
+        $stmh->bindValue(':id',$id,PDO::PARAM_STR);
+        $stmh->bindValue(':pw',$pw,PDO::PARAM_STR);
+        $stmh->bindValue(':email',$email,PDO::PARAM_STR);
+        $stmh->execute();
+        $pdo->commit();
+        print "회원가입 완료<br>\n";
+        print "<a href=main.php>홈으로</a>";
+    }catch(PDOException $Exception){
+        $pdo->rollBack();
+        print 'error:'.$Exception->getMessage();
+        print "<a href=main.php>홈으로</a>";
+     } 
 }
 
-//회원가입 완료된 회원의 정보를 db에 저장
-$join=mysqli_query($conn, "insert into user (id,pw,email,user_name)
- values('$id','$pw','$email','$name')");
-
-if($join){
-    print "회원가입 완료";
-}
 
