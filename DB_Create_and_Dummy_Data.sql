@@ -41,9 +41,9 @@ create table coments_tb(
 )default charset = utf8;
 
 ##회원 테이블 더미 데이터
-insert into user_tb(id,pw,email,user_name) values('abc','111','abc@a.com','herry');
-insert into user_tb(id,pw,email,user_name) values('php','222','php@php.com','hermione');
-insert into user_tb(id,pw,email,user_name) values('java','333','java@java.com','ronald');
+insert into user_tb(id,pw,email) values('abc','111','abc@a.com');
+insert into user_tb(id,pw,email) values('php','222','php@php.com');
+insert into user_tb(id,pw,email) values('java','333','java@java.com');
 
 ##카테고리 테이블 더미 데이터
 insert into category_tb(category_nm) values('romance');
