@@ -7,8 +7,7 @@ create table user_tb(
 	user_no int primary key auto_increment,
     id varchar(20) not null unique,
     pw varchar(20) not null,
-    email varchar(20) not null unique,
-    user_name varchar(20) not null
+    email varchar(20) not null unique
 )default charset = utf8;
 
 ##카테고리 테이블
