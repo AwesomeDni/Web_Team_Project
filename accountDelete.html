@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="txt/html" ; charset="utf-8">
+    <title></title>
+    <style>
+    body {text-align: center; padding: 10px;}
+    div { padding: 5px;}
+    table.center { margin-left:auto; margin-right:auto;}
+    </style>
+</head>
+<body>
+    <h2>회원탈퇴 페이지</h2>
+    <hr>
+    본인확인
+    <form name="form" method="POST" action="accountDelete.php">
+        <div>
+            <label for="id"> ID </label>
+            <input type="text" name="id">
+        </div>
+        <div>
+            <label for="pw"> PW </label>
+            <input type="password" name="pw">
+        </div>
+        <div>
+            <label for="email"> E-mail </label>
+            <input type="email" name="email"  placeholder="이메일">
+        </div>
+        <div>
+            <input type="submit" value="탈퇴">
+        </div>
+    </form>
+    <br>
+</body>
+</html>
