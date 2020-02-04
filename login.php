@@ -24,20 +24,27 @@ else
     }catch(PDOException $Exception){
        print 'error:'.$Exception->getMessage();
     } 
-    
     if($count<0){
         print "로그인 실패.";
     }else{
         $row=$stmh->fetch(PDO::FETCH_ASSOC);
-        if($row['pw']==$pw && $row['id']==$id){
-            $_SESSION['id']=$id;
-            if(isset($_SESSION['id'])){
-                header('location:./main.php');
+        if (is_null($row['pw']) || is_null($row['pw']))
+        {
+            print "<script>alert('패스워드나 아이디가 틀렸습니다.');</script>";
+            print "<script>location.href='login.html';</script>";
+        }
+        else
+        {
+            if($row['pw']==$pw && $row['id']==$id){
+                $_SESSION['id']=$id;
+                if(isset($_SESSION['id'])){
+                    header('location:./main.php');
+                }else{
+                    print "세션 저장 실패";
+                }
             }else{
-                print "세션 저장 실패";
+                print "로그인 실패";
             }
-        }else{
-            print "패스워드나 아이디가 틀렸습니다.";
         }
     }
 }
