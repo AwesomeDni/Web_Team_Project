@@ -28,9 +28,9 @@ else
         print "로그인 실패.";
     }else{
         $row=$stmh->fetch(PDO::FETCH_ASSOC);
-        if (is_null($row['pw']) || is_null($row['pw']))
+        if (is_null($row['id']))
         {
-            print "<script>alert('패스워드나 아이디가 틀렸습니다.');</script>";
+            print "<script>alert('입력한 아이디에 해당하는 회원 정보가 없습니다.');</script>";
             print "<script>location.href='login.html';</script>";
         }
         else
@@ -43,7 +43,8 @@ else
                     print "세션 저장 실패";
                 }
             }else{
-                print "로그인 실패";
+                print "<script>alert('잘못된 비밀번호 입니다.');</script>";
+                print "<script>location.href='login.html';</script>";
             }
         }
     }
