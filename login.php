@@ -10,7 +10,7 @@ $pw=$_POST['pw'];
 try{
     $sql="SELECT * FROM user_tb where id = :id";
     $stmh = $pdo->prepare($sql);
-    $stmh->bindValue(':id',$id,PDO::PARAM_INT);
+    $stmh->bindValue(':id',$id,PDO::PARAM_STR);
     $stmh->execute();
     $count=$stmh->rowCount();
 }catch(PDOException $Exception){

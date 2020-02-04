@@ -6,16 +6,16 @@ require_once("db_conn.php");
 $pdo = DB_conn();
 $id=$_POST['id'];
 $pw=$_POST['pw'];
-$_SESSION['id'];
+$email=$_POST['email'];
 
-#id확인(일치시 해당 정보 갖고옴)
+#id확인(일치시 정보 갖고옴)
 if($id!=$_SESSION['id']){
     print "<script>alert('id does not match');</script>";
 }else{
     try{
         $sql="SELECT * FROM user_tb where id= :id";
         $stmh=$pdo->prepare($sql);
-        $stmh->bindValue(':id',$id,PDO::PARAM_INT);
+        $stmh->bindValue(':id',$id,PDO::PARAM_STR);
         $stmh->execute();
         $count=$stmh->rowCount();
     }catch(PDOException $Exception){
@@ -23,11 +23,18 @@ if($id!=$_SESSION['id']){
     } 
 }
 
+#id 맞을때 갖고온 정보로 email과 pw맞는지 확인. 일치하면 회원정보 삭제 진행
 if(!$count){
-    print '일치정보 없음';
+    print '해당 계정의 정보 없음';
 }else{
-    while($stmh->fetch(PDO::FETCH_ASSOC)){
-        if
+    while($row=$stmh->fetch(PDO::FETCH_ASSOC)){
+        if($row['pw']!=$pw || $row['email']!=$email){
+            print "입력정보가 일치하지 않습니다."
+        }else{
+            $pdo->beginTransaction();
+            $sql="DELETE FROM user_tb WHERE id=:id";
+            $stmh->bindValue(':id',$id,PDO::PARAM_STR);
+        }
     }
 }
 
