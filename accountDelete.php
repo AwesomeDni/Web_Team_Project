@@ -5,8 +5,9 @@ require_once("db_conn.php");
 
 $pdo = DB_conn();
 $id=$_POST['id'];
-$pw=$_POST['pw'];
+$pw=crypt($_POST['pw'],crypt($_POST['pw'],'abc'));
 $email=$_POST['email'];
+$check=0;
 
 #로그인상태확인
 if(!isset($_SESSION['id'])){
@@ -52,10 +53,11 @@ if(!$count){
     }
 }
 
-#회원탈퇴 성공하면 쿠키와 세션 지우고 메인으로
+#회원탈퇴 성공하면 logout.php이용해 쿠키와 세션 지우고 메인으로
 if(!$check){
-    print "회원탈퇴에 실패하였습니다. 다시 시도해주세요.";
+    print "<script>alert('회원탈퇴에 실패하였습니다. 다시 시도해주세요.');</script>";
+    print "<script>location.href='login.html';</script>";
 }else{
-    header('location: ./main.php');
+    header('location: ./logout.php');
 }
 
