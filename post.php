@@ -4,6 +4,18 @@ session_start();
 $title = $_POST['title'];
 $content = $_POST['content'];
 
+# 제목과 내용이 비어있는지 확인
+if($title == '')
+{   print "<script>alert('제목을 입력하세요.');</script>";
+    print "<script>history.back();</script>";
+    return;
+}
+if($content == '')
+{   print "<script>alert('내용을 입력하세요.');</script>";
+    print "<script>history.back();</script>";
+    return;
+}
+
 $date=date('Y-m-d H:i:s');//글쓴 날짜를 위한 변수
 
 # DB 연결
