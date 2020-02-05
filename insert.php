@@ -22,6 +22,14 @@ if(isset($_SESSION['id']))
 # 입력 폼
 ?>
     <form method="POST" action="post.php" autocomplete="off">
+        카테고리:<select name="category">
+            <option value="" selected>--카테고리를 선택하세요--</option>
+            <option value="1">PHP</option>
+            <option value="2">JAVA</option>
+            <option value="3">PYTHON</option>
+            <option value="4">Laravel</option>
+            <option value="5">Eclips</option>
+	    </select><br>
         제목: <input type="text" name="title"><br>
         내용: <textarea name="content"></textarea>
         <input type="submit" value="확인">
