@@ -109,6 +109,12 @@ while($row=$stmh->fetch(PDO::FETCH_ASSOC))//PDO::FETCH_ASSOC 결과값을 한 �
     </TR>
 <?php 
 } 
+# url창에 문서번호를 없는 번호를 쳤을때
+if($writer=="") {
+    print "<script>alert('잘못된 접근입니다.');</script>";
+    print "<script>history.back();</script>";
+    return;
+}
 ?>
 </TBODY>
 </TABLE>
