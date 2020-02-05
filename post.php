@@ -3,6 +3,13 @@ session_start();
 # insert.php로 부터 받은 정보 추출하여 변수에 저장
 $title = $_POST['title'];
 $content = $_POST['content'];
+$category = $_POST['category'];
+
+if($category=="")
+{   print "<script>alert('카테고리를 선택해 주세요.');</script>";
+    print "<script>history.back();</script>";
+    return;
+}
 
 # 제목과 내용이 비어있는지 확인
 if($title == '')
@@ -44,7 +51,7 @@ try
     $stmh->bindValue(':title',$title);
     $stmh->bindValue(':content',$content);
     $stmh->bindValue(':user_no',$user_no);
-    $stmh->bindValue(':category_no',$_SESSION['category_no']);
+    $stmh->bindValue(':category_no',$category);
     $stmh->bindValue(':date',$date);
     $stmh->execute();
 }
