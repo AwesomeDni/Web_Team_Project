@@ -5,7 +5,7 @@ require_once("db_conn.php");
 
 $pdo = DB_conn();
 $id=$_POST['id'];
-$pw=$_POST['pw'];
+$pw=crypt($_POST['pw'],crypt($_POST['pw'],'abc'));
 
 #공백입력시 오류표시
 if ($id=="" || $pw == "")

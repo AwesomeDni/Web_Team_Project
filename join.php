@@ -8,12 +8,19 @@ $email=$_POST['email'];
 require_once("db_conn.php");
 $pdo=DB_conn();
 
-#비밀번호와 비밀번호 재확인이 같지 않은 경우
-if($pw != $pwc){
+#비밀번호와 비밀번호 재확인이 같지 않으면 에러, 맞으면 암호 복호화
+if($pw != $pwc)
+{
     print "비밀번호와 비밀번호 재확인이 일치하지 않습니다.";
     print "<a href=join.html>돌아가기</a>";
     exit();
 }
+else
+{
+    $pw = crypt($pw,crypt($pw,'abc'));
+}
+
+
 #빈칸이 있을 경우
 if($id==NULL || $pw==NULL || $email==NULL){ 
     print "빈 칸을 모두 채워주세요.";

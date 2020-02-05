@@ -22,9 +22,10 @@ if(!isset($_SESSION['id'])){
 <a href="join.html"><button>회원가입</button></a>
 <?php
 }else{
+    $id = $_SESSION['id']
 ?>
 <font size="5">회원접속</font>
-<p>환영합니다.</p>
+<p><?=$id?>님 환영합니다.</p>
 <a href=logout.php><button>로그아웃</button></a>
 <a href="accountDelete.html"><button>회원탈퇴</button></a>
 <?php
