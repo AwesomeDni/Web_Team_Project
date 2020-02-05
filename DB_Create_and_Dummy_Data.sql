@@ -46,12 +46,11 @@ insert into user_tb(id,pw,email) values('php','222','php@php.com');
 insert into user_tb(id,pw,email) values('java','333','java@java.com');
 
 ##카테고리 테이블 더미 데이터
-insert into category_tb(category_nm) values('romance');
-insert into category_tb(category_nm) values('action');
-insert into category_tb(category_nm) values('sf');
-insert into category_tb(category_nm) values('comedy');
-insert into category_tb(category_nm) values('thriller');
-insert into category_tb(category_nm) values('documentary');
+insert into category_tb(category_nm) values('PHP');
+insert into category_tb(category_nm) values('JAVA');
+insert into category_tb(category_nm) values('PYTHON');
+insert into category_tb(category_nm) values('Laravel');
+insert into category_tb(category_nm) values('Eclips');
 
 ##게시글 테이블 더미 데이터
 insert into contents_tb(title,content,user_no,category_no,write_dt) values('test','DOC for test',1,1,now());
@@ -69,7 +68,7 @@ select * from show_view;
 
 ##삭제 테스트
 #delete from contents_tb where content_no = 2;
-#delete from coments_tb where coment_no = 2;
+#delete from coments_tb whuser_tbere coment_no = 2;
 
 ##DB 인코딩 설정 확인
 #SHOW VARIABLES LIKE 'c%';
