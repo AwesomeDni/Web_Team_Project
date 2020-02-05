@@ -17,8 +17,15 @@ $cno = $_SESSION['content_no'];
         $count = $stmh->rowCount();//sql문 실행 결과의 레코드 수 반환
     } 
     catch(PDOException $Exception)//에러 발생시 $Exception이라는 이름으로 PDO예외 처리 객체 생성
-    {   print "error:".$Exception->getMessage();    }
+    {   print "error:".$Exception->getMessage();  }
 
-?>   
+    if($stmh){
+        echo "<script> alert('삭제 성공'); </script>";
+    }
+    else{
+        echo "<script> alert('삭제 실패'); </script>";
+    }
+?>
+<meta http-equiv='refresh' content='0, list.php'>   
 </BODY>
 </HTML>
