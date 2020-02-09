@@ -26,7 +26,9 @@ if(!isset($_SESSION['id'])){
 ?>
 <font size="5">회원접속</font>
 <p><?=$id?>님 환영합니다.</p>
-<a href=logout.php><button>로그아웃</button></a>
+<a href="logout.php"><button>로그아웃</button></a>
+<a href="mypage.php"><button>마이페이지</button>
+<a href="list.php"><button>게시판</button>
 <a href="accountDelete.html"><button>회원탈퇴</button></a>
 <?php
 }
