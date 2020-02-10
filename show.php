@@ -44,13 +44,41 @@ while ($row=$stmh->fetch(PDO::FETCH_ASSOC)) {
     $max=$row['max'];
     $min=$row['min'];
 }
+##이전 글번호를 구함
+try
+{   //쿼리문 작성
+    $query = "SELECT max(content_no) forward from contents_tb where content_no < $content_no";
+    $stmh=$pdo->prepare($query); //sql문을 인잭션으로 부터 보호하기 위한 처리
+    $stmh->execute();
+}
+catch(PDOException $e)
+{   print 'err: '. $e->getMessage();
+$pdo->rollBack();
+}
+while ($row=$stmh->fetch(PDO::FETCH_ASSOC)) {
+    $forward=$row['forward'];
+}
+##다음 글번호를 구함
+try
+{   //쿼리문 작성
+    $query = "SELECT min(content_no) next_ from contents_tb where content_no > $content_no";
+    $stmh=$pdo->prepare($query); //sql문을 인잭션으로 부터 보호하기 위한 처리
+    $stmh->execute();
+}
+catch(PDOException $e)
+{   print 'err: '. $e->getMessage();
+$pdo->rollBack();
+}
+while ($row=$stmh->fetch(PDO::FETCH_ASSOC)) {
+    $next=$row['next_'];
+}
 ##마지막 글에는 다음 페이지 표시 x
 if (!($max==($content_no))) {
-    print "<button onclick='location.href=\"show.php?content_no=".($content_no + 1)."\"'>다음 글 ▲</button>";
+    print "<button onclick='location.href=\"show.php?content_no=".($next)."\"'>다음 글 ▲</button>";
 }
 ##처음 글에는 이전 페이지 표시 x 
 if (!($min==($content_no))) {
-    print "<button onclick='location.href=\"show.php?content_no=".($content_no - 1)."\"'>이전 글 ▼</button>";
+    print "<button onclick='location.href=\"show.php?content_no=".($forward)."\"'>이전 글 ▼</button>";
 }
 
 #문서의 조회수
