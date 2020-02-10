@@ -41,9 +41,9 @@ create table coments_tb(
 )default charset = utf8;
 
 ##회원 테이블 더미 데이터
-insert into user_tb(id,pw,email) values('abc','111','abc@a.com');
-insert into user_tb(id,pw,email) values('php','222','php@php.com');
-insert into user_tb(id,pw,email) values('java','333','java@java.com');
+insert into user_tb(id,pw,email) values('abc','1111','abc@a.com');
+insert into user_tb(id,pw,email) values('php','2222','php@php.com');
+insert into user_tb(id,pw,email) values('java','3333','java@java.com');
 
 ##카테고리 테이블 더미 데이터
 insert into category_tb(category_nm) values('PHP');
@@ -57,7 +57,7 @@ insert into contents_tb(title,content,user_no,category_no,write_dt) values('test
 insert into contents_tb(title,content,user_no,category_no,write_dt) values('php','php is awesome',2,2,now());
 insert into contents_tb(title,content,user_no,category_no,write_dt) values('how','coding is fun',3,1,now());
 insert into contents_tb(title,content,user_no,category_no,write_dt) values('testtt','umm..',3,4,now());
-insert into contents_tb(title,content,user_no,category_no,write_dt) values('tseses','wow..',2,6,now());
+insert into contents_tb(title,content,user_no,category_no,write_dt) values('tseses','wow..',2,5,now());
 
 ##댓글 테이블 더미 데이터
 insert into coments_tb(coment,user_no,content_no,write_dt) values('this too', 2,1,now());
