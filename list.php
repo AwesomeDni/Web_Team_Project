@@ -6,7 +6,7 @@
 </head>
 <body>
 <header>
-    
+<button onclick="location.href='main.php'">메인</button>
 <?php
 # 로그인 체크
 if(isset($_SESSION['id']))
@@ -59,7 +59,7 @@ $limit_idx = ($page - 1) * $page_set; // 글 시작위치
 # 게시글 불러오기
 try
 {   //쿼리문 작성
-    $query = "SELECT content_no,title,id,view_cnt from show_view order by content_no desc limit $limit_idx, $page_set";
+    $query = "SELECT content_no,title,id,view_cnt,write_dt from show_view order by content_no desc limit $limit_idx, $page_set";
     $stmh=$pdo->prepare($query); //sql문을 인잭션으로 부터 보호하기위한 처리
     $stmh->execute();
 }
@@ -69,7 +69,7 @@ catch(PDOException $e)
 
 <table border=1>
     <tr align="center">
-        <td>글번호</td><td>제목</td><td>작성자</td><td>조회수</td>
+        <td>글번호</td><td>제목</td><td>작성자</td><td>조회수</td><td>작성일</td>
     </tr>
 <?php
 # 게시글 리스트 출력
@@ -79,6 +79,9 @@ while($row=$stmh->fetch(PDO::FETCH_ASSOC))
     print "<td width=500px><a href='show.php?content_no=". $row['content_no'] ."'>" . $row['title'] . "</a></td>";
     print "<td align=center>".$row['id']."</td>";
     print "<td align=center>".$row['view_cnt']."</td>";
+    $date = $row['write_dt'];
+    $dateVal = substr($date,0,10);
+    print "<td align=center>".$dataVal."</td>";
     print "</tr>";
 }
 ?>
