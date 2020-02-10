@@ -81,7 +81,7 @@ while($row=$stmh->fetch(PDO::FETCH_ASSOC))
     print "<td align=center>".$row['view_cnt']."</td>";
     $date = $row['write_dt'];
     $dateVal = substr($date,0,10);
-    print "<td align=center>".$dataVal."</td>";
+    print "<td align=center>".$dateVal."</td>";
     print "</tr>";
 }
 ?>
