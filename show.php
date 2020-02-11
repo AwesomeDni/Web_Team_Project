@@ -158,4 +158,6 @@ if($id==$writer)//글 작성자만 수정 및 삭제 가능
 <?php
 }
 ?>
+<br><br>
+<?php require_once('reply.php'); ?>
 </footer>
