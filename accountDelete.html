@@ -8,6 +8,18 @@
     div { padding: 5px;}
     table.center { margin-left:auto; margin-right:auto;}
     </style>
+    <script>
+        function confirmation() {
+            var check = confirm("회원탈퇴하면 작성한 댓글과 게시글이 모두 사라집니다. 진행하시겠습니까?");
+            if(check){
+                document.getElementById("delete").value = "YES";
+                alert("회원탈퇴를 진행합니다.");
+            }else{
+                document.getElementById("delete").value = "NO";
+                alert("취소하고 이전 화면으로 돌아갑니다.");
+            }
+        }
+    </script>
 </head>
 <body>
     <h2>회원탈퇴 페이지</h2>
@@ -26,8 +38,9 @@
             <label for="email"> E-mail </label>
             <input type="email" name="email"  placeholder="이메일" autocomplete="off">
         </div>
+        <input type="hidden" name="delete" id="delete" value="default">
         <div>
-            <input type="submit" value="탈퇴">
+            <button type ="submit" onclick="confirmation()">탈퇴</button>
         </div>
     </form>
     <br>

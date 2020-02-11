@@ -9,6 +9,14 @@ $pw=crypt($_POST['pw'],crypt($_POST['pw'],'abc'));
 $email=$_POST['email'];
 $check=0;
 
+
+if(isset($_POST['delete']) && $_POST['delete']=='NO'){
+    header('location: ./accountDelete.html');
+}else if (isset($_POST['delete']) && $_POST['delete']=='default'){
+    print "탈퇴 진행상황에 대한 정보 전달에 실패하였습니다. 다시 시도해주세요.";
+    header('location: ./accountDelete.html');
+}else if (isset($_POST['delete']) && $_POST['delete']=='YES'){
+
 #로그인상태확인
 if(!isset($_SESSION['id'])){
     header('location: ./main.php');
@@ -61,3 +69,4 @@ if(!$check){
     header('location: ./logout.php');
 }
 
+}
