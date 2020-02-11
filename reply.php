@@ -1,7 +1,8 @@
 <?php
 require_once('db_conn.php');
-$dbo = connect();
-$content_no_sql = "select * from contents_tb where content_no = $_GET['content_no']";
+$dbo = DB_conn();
+$cno =$_GET['content_no'];
+$content_no_sql = "select * from contents_tb where content_no = $cno";
 $content_stt=$dbo->prepare($content_no_sql);
 $content_row=$content_stt->fetch();
 ?>
@@ -14,7 +15,7 @@ $content_row=$content_stt->fetch();
 <body>
 <form action="replyinsert.php" method="post">
 <input type="hidden" name="content_no" value="<?=$content_row['content_no']?>">
-<textarea name="content" rows="8" cols="80"></textarea>
+<textarea name="coment" rows="8" cols="80"></textarea>
 <input type="submit" value="댓글쓰기">
 </form>
 </body>
