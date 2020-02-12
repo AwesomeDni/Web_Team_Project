@@ -10,7 +10,6 @@
 <head>
     <title>mypage</title>
     <meta http-equiv="Content-Type" content="text/html charset=utf8";>
-    <p id="hea1">category here</p>
     <style>
         nav{
             float:left;
@@ -34,6 +33,26 @@
     </style>
 </head>
 <body>
+    <header>
+        <center>
+        <a href="main.html"> 메인으로</a>
+        <a href="list.php"> 전체게시글</a>
+        </center>
+    </header>
+    <hr>
+    <span class='category'>
+    <ul>
+        <center>
+        <b>▼카테고리 선택▼</b><br>
+        <a href="list.php?category=0"><b>전체글보기</b></a>
+        <a href="list.php?category=1">PHP</a>
+        <a href="list.php?category=2">JAVA</a>
+        <a href="list.php?category=3">PYTHON</a>
+        <a href="list.php?category=4">Laravel</a>
+        <a href="list.php?category=5">Eclips</a>
+        </center>
+    </ul>
+    </span>
     <hr>
     <!--유저 정보, 내가 쓴 글 확인하는 링크-->
     <aside>
@@ -59,7 +78,6 @@
             <h3>내가 쓴 글</h3>
             <br><br><hr>
             <article>
-                <h3>list 내용 올곳</h3>
                 <?php
                 # DB연결
                 $pdo = DB_conn();
