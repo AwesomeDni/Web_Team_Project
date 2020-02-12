@@ -1,14 +1,17 @@
 <title>Web Project</title>
 <?php session_start(); ?>
+<link rel="stylesheet" href="show.css">
 <header>
+<button id="main" onclick="location.href='main.php'">메인</button>
 <?php
 #로그인 체크
 if(isset($_SESSION['id']))
 {   $id = $_SESSION['id'];
-    print $id.' 님';
     ?>
-	<button onclick="location.href='logout.php'"> 로그아웃</button>
-<?php
+	<button class="header" onclick="location.href='logout.php'"> 로그아웃</button>
+    <a href="mypage.php"><button class="header">마이페이지</button></a>
+    <?php
+    print '<div class="header">'.$id.' 님</div>';
 }
 else
 {   $id='';
@@ -19,7 +22,7 @@ else
 ?>
 </header>
 <hr>
-
+<div class="main_content">
 <?php
 #DB연결
 require_once('db_conn.php');
@@ -27,13 +30,25 @@ $pdo = DB_conn();
 
 #사용자가 요청한 문서 번호 획득
 $_SESSION['content_no'] = $content_no = $_GET['content_no'];
-
+$category = $_SESSION['category'];
+if(isset($_SESSION['category_nm'])){
+    $category_nm =$_SESSION['category_nm'];
+    print "<h3>$category_nm</h3>";
+}
 #이전,다음 게시글 보기
 try
 {   //쿼리문 작성
-    $query = "select max(content_no) max, min(content_no) min from contents_tb";
-    $stmh=$pdo->prepare($query); //sql문을 인잭션으로 부터 보호하기 위한 처리
-    $stmh->execute();
+    if($category>0)
+    {   $query = "SELECT max(content_no) max, min(content_no) min from contents_tb where category_no = $category";
+        $stmh=$pdo->prepare($query); //sql문을 인잭션으로 부터 보호하기 위한 처리
+        $stmh->execute();
+    }
+    else
+    {   $query = "SELECT max(content_no) max, min(content_no) min from contents_tb";
+        $stmh=$pdo->prepare($query); //sql문을 인잭션으로 부터 보호하기 위한 처리
+        $stmh->execute();
+    }
+    
 }
 catch(PDOException $e)
 {   print 'err: '. $e->getMessage();
@@ -47,9 +62,17 @@ while ($row=$stmh->fetch(PDO::FETCH_ASSOC)) {
 ##이전 글번호를 구함
 try
 {   //쿼리문 작성
-    $query = "SELECT max(content_no) forward from contents_tb where content_no < $content_no";
-    $stmh=$pdo->prepare($query); //sql문을 인잭션으로 부터 보호하기 위한 처리
-    $stmh->execute();
+    if($category>0)
+    {   $query = "SELECT max(content_no) forward from contents_tb where content_no < $content_no and category_no=$category";
+        $stmh=$pdo->prepare($query); //sql문을 인잭션으로 부터 보호하기 위한 처리
+        $stmh->execute();    
+    }
+    else
+    {   $query = "SELECT max(content_no) forward from contents_tb where content_no < $content_no";
+        $stmh=$pdo->prepare($query); //sql문을 인잭션으로 부터 보호하기 위한 처리
+        $stmh->execute();
+    }
+    
 }
 catch(PDOException $e)
 {   print 'err: '. $e->getMessage();
@@ -61,9 +84,17 @@ while ($row=$stmh->fetch(PDO::FETCH_ASSOC)) {
 ##다음 글번호를 구함
 try
 {   //쿼리문 작성
-    $query = "SELECT min(content_no) next_ from contents_tb where content_no > $content_no";
-    $stmh=$pdo->prepare($query); //sql문을 인잭션으로 부터 보호하기 위한 처리
-    $stmh->execute();
+    if($category>0)
+    {   $query = "SELECT min(content_no) next_ from contents_tb where content_no > $content_no and category_no = $category";
+        $stmh=$pdo->prepare($query); //sql문을 인잭션으로 부터 보호하기 위한 처리
+        $stmh->execute();    
+    }
+    else
+    {   $query = "SELECT min(content_no) next_ from contents_tb where content_no > $content_no";
+        $stmh=$pdo->prepare($query); //sql문을 인잭션으로 부터 보호하기 위한 처리
+        $stmh->execute();
+    }
+    
 }
 catch(PDOException $e)
 {   print 'err: '. $e->getMessage();
@@ -83,9 +114,9 @@ if (!($min==($content_no))) {
 
 #문서의 조회수
 $cnt_flag = 0;
-if(!isset($_COOKIE['view'.$content_no])) {//한 방문자가 새로고침으로 조회수를 올리는것 방지
+if(!isset($_COOKIE[$id.$content_no])) {//한 방문자가 새로고침으로 조회수를 올리는것 방지
     $cnt_flag += 1;
-    setcookie('view'.$content_no,$cnt_flag);
+    setcookie($id.$content_no,$cnt_flag);
     try
     {   //조회수 증가 쿼리
         $query = "update contents_tb set view_cnt = view_cnt + 1 where content_no = :no";
@@ -136,7 +167,7 @@ while($row=$stmh->fetch(PDO::FETCH_ASSOC))//PDO::FETCH_ASSOC 결과값을 한 �
         <TD><?=$row['view_cnt']?></TD>
     </TR>
 <?php 
-} 
+}
 # url창에 문서번호를 없는 번호를 쳤을때
 if($writer=="") {
     print "<script>alert('잘못된 접근입니다.');</script>";
@@ -146,6 +177,7 @@ if($writer=="") {
 ?>
 </TBODY>
 </TABLE>
+
 
 <footer>
 <button onclick="location.href='list.php'">목록 보기</button>
@@ -158,6 +190,18 @@ if($id==$writer)//글 작성자만 수정 및 삭제 가능
 <?php
 }
 ?>
+</div>
+<!-- 카테고리 바-->
+<div class='category'>
+    <ul>
+        <a href="list.php?category=0"><li><b>전체글보기</b></li></a>
+        <a href="list.php?category=1"><li>PHP</li></a>
+        <a href="list.php?category=2"><li>JAVA</li></a>
+        <a href="list.php?category=3"><li>PYTHON</li></a>
+        <a href="list.php?category=4"><li>Laravel</li></a>
+        <a href="list.php?category=5"><li>Eclips</li></a>
+    </ul>
+</div>
 <br><br>
 <?php require_once('reply.php'); ?>
 </footer>
