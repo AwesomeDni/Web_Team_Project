@@ -45,7 +45,7 @@ insert into user_tb(id,pw,email) values('abc','1111','abc@a.com');
 insert into user_tb(id,pw,email) values('php','2222','php@php.com');
 insert into user_tb(id,pw,email) values('java','3333','java@java.com');
 
-##카테고리 테이블 더미 데이터
+##카테고리 테이블 더미contents_tb 데이터
 insert into category_tb(category_nm) values('PHP');
 insert into category_tb(category_nm) values('JAVA');
 insert into category_tb(category_nm) values('PYTHON');
@@ -65,7 +65,9 @@ insert into coments_tb(coment,user_no,content_no,write_dt) values('java also', 3
 
 create view show_view as select content_no,title,content,id,write_dt,view_cnt from contents_tb,user_tb where contents_tb.user_no=user_tb.user_no;
 select * from show_view;
-
+create view list_view as select content_no,title,id,write_dt,view_cnt,category_no from contents_tb,user_tb where contents_tb.user_no=user_tb.user_no;
+select * from list_view;
+drop view list_view;
 ##삭제 테스트
 #delete from contents_tb where content_no = 2;
 #delete from coments_tb whuser_tbere coment_no = 2;
