@@ -19,6 +19,7 @@ if(isset($_POST['delete']) && $_POST['delete']=='NO'){
 
 #로그인상태확인
 if(!isset($_SESSION['id'])){
+    print "<script>alert('로그인해주세요.');</script>";
     header('location: ./main.php');
 }
 
@@ -64,7 +65,7 @@ if(!$count){
 #회원탈퇴 성공하면 logout.php이용해 쿠키와 세션 지우고 메인으로
 if(!$check){
     print "<script>alert('회원탈퇴에 실패하였습니다. 다시 시도해주세요.');</script>";
-    print "<script>location.href='login.html';</script>";
+    print "<script>location.href='accountDelete.html';</script>";
 }else{
     header('location: ./logout.php');
 }
