@@ -3,43 +3,75 @@
 <html>
 <head>
     <title>Web Project</title>
+    <link rel="stylesheet" href="list.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 </head>
 <body>
 <header>
-<button onclick="location.href='main.php'">메인</button>
-<?php
-# 로그인 체크
-if(isset($_SESSION['id']))
-{   $id = $_SESSION['id'];
-    print $id.' 님';
+    <div class='header'>
+        <button id="main" onclick="location.href='main.php'">메인</button>
+    <?php
+    # 로그인 체크
+    if(isset($_SESSION['id']))
+    {   $id = $_SESSION['id'];
+        ?>
+        <button onclick="location.href='logout.php'"> 로그아웃</button>
+        <a href="mypage.php"><button>마이페이지</button></a>
+        <?php
+        print '<div id="name">'.$id.' 님</div>';
+    }
+    else
+    {?>
+        <button onclick="location.href='login.html'"> 로그인</button>
+        <?php
+    }
     ?>
-	<button onclick="location.href='logout.php'"> 로그아웃</button>
-	<?php
-}
-else
-{?>
-	<button onclick="location.href='login.html'"> 로그인</button>
-	<?php
-}
-?>
+    </div>
 </header>
 <hr>
+<div class='main_content'>
 <h1>게시글</h1>
 
 <?php 
 # DB연결
-require_once('db_conn.php');
+include('db_conn.php');
 $pdo = DB_conn();
 
 // 페이지 설정
 $page_set = 10; // 한페이지 줄수
 $block_set = 5; // 한페이지 블럭수
 
+$category = 0;
+$_SESSION['category'] = $category;
+$category_nm = '';
+if(isset($_GET['category']))
+{   $category = $_GET['category'];
+    $_SESSION['category'] = $category;
+
+    try
+    {   $query = "SELECT category_nm from category_tb where category_no = $category";
+        $stmh=$pdo->prepare($query);
+        $stmh->execute();
+
+    }
+    catch(PDOException $e){ print 'err: '.$e->getMessage();}
+    while($row=$stmh->fetch(PDO::FETCH_ASSOC))
+    {   $category_nm = $row['category_nm'];    }
+    $_SESSION['category_nm'] = $category_nm;
+}
+
 try
 {   //쿼리문 작성
-    $query = "SELECT count(content_no) as total FROM show_view";
-    $stmh=$pdo->prepare($query); //sql문을 인잭션으로 부터 보호하기위한 처리
-    $stmh->execute();
+    if($category>0)
+    {   $query = "SELECT count(content_no) as total FROM list_view where category_no=$category";
+        $stmh=$pdo->prepare($query); //sql문을 인잭션으로 부터 보호하기위한 처리
+        $stmh->execute();
+    }
+    else
+    {   $query = "SELECT count(content_no) as total FROM list_view";
+        $stmh=$pdo->prepare($query); //sql문을 인잭션으로 부터 보호하기위한 처리
+        $stmh->execute();
+    }
 }
 catch(PDOException $e)
 {   print 'err: '. $e->getMessage();   }
@@ -59,10 +91,25 @@ $limit_idx = ($page - 1) * $page_set; // 글 시작위치
 # 게시글 불러오기
 try
 {   //쿼리문 작성
-    $query = "SELECT content_no,title,id,view_cnt,write_dt from show_view order by content_no desc limit $limit_idx, $page_set";
-    $stmh=$pdo->prepare($query); //sql문을 인잭션으로 부터 보호하기위한 처리
-    $stmh->execute();
+    if($category>0)
+    {   $query = "SELECT * from list_view where category_no=$category order by content_no desc limit $limit_idx, $page_set";
+        $stmh=$pdo->prepare($query); //sql문을 인잭션으로 부터 보호하기위한 처리
+        $stmh->execute();
+        ?>
+        <script>
+            $(document).ready(function(){
+                $("h1").text("<?= $category_nm ?>");
+            });
+        </script>
+        <?php
+    }
+    else
+    {   $query = "SELECT content_no,title,id,view_cnt,write_dt from show_view order by content_no desc limit $limit_idx, $page_set";
+        $stmh=$pdo->prepare($query); //sql문을 인잭션으로 부터 보호하기위한 처리
+        $stmh->execute();
+    }
 }
+
 catch(PDOException $e)
 {   print 'err: '. $e->getMessage();   }
 ?>
@@ -109,12 +156,25 @@ print ($prev_page > 0) ? "<a href='".$_SERVER['PHP_SELF']."?page=$prev_page'>[pr
 print ($prev_block > 0) ? "<a href='".$_SERVER['PHP_SELF']."?page=$prev_block_page'>...</a> " : "... ";
  
 for ($i=$first_page; $i<=$last_page; $i++) 
-{   print ($i != $page) ? "<a href='".$_SERVER['PHP_SELF']."?page=$i'>$i</a> " : "<b>$i</b> ";
+{   print ($i != $page) ? "<a href='".$_SERVER['PHP_SELF']."?category=$category&page=$i'>$i</a> " : "<b>$i</b> ";
 }
  
 print ($next_block <= $total_block) ? "<a href='".$_SERVER['PHP_SELF']."?page=$next_block_page'>...</a> " : "... ";
 print ($next_page <= $total_page) ? "<a href='".$_SERVER['PHP_SELF']."?page=$next_page'>[next]</a>" : "[next]";
 ?>
 <button onclick="location.href='insert.php'">글쓰기</button>
+</div>
+
+<!-- 카테고리 바-->
+<div class='category'>
+    <ul>
+        <a href="list.php?category=0"><li><b>전체글보기</b></li></a>
+        <a href="list.php?category=1"><li>PHP</li></a>
+        <a href="list.php?category=2"><li>JAVA</li></a>
+        <a href="list.php?category=3"><li>PYTHON</li></a>
+        <a href="list.php?category=4"><li>Laravel</li></a>
+        <a href="list.php?category=5"><li>Eclips</li></a>
+    </ul>
+</div>
 </body>
 </html>
