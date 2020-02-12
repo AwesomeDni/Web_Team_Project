@@ -35,7 +35,7 @@
 <body>
     <header>
         <center>
-        <a href="main.html"> 메인으로</a>
+        <a href="main.php"> 메인으로</a>
         <a href="list.php"> 전체게시글</a>
         </center>
     </header>
