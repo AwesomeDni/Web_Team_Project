@@ -4,6 +4,7 @@
 ?>
 <?php
     require_once("db_conn.php");
+    $id=$_SESSION['id'];
 ?>
 <html>
 <head>
@@ -52,9 +53,9 @@
         </nav>
     </aside>
     <?php
-    $reset=session_destroy();//모든세션 지우기
-    if($reset){
-        header('location: ./main.php'); }
+        if(!isset($_SESSION['id'])){
+            header('location: ./main.php'); 
+        }
     ?>
     <?php
     //내가 쓴 글
