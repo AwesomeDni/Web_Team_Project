@@ -7,7 +7,8 @@ create table user_tb(
 	user_no int primary key auto_increment,
     id varchar(20) not null unique,
     pw varchar(20) not null,
-    email varchar(20) not null unique
+    email varchar(20) not null unique,
+    is_admin int default 1 check(is_admin in (0,1)) 
 )default charset = utf8;
 
 ##카테고리 테이블
@@ -41,6 +42,7 @@ create table coments_tb(
 )default charset = utf8;
 
 ##회원 테이블 더미 데이터
+insert into user_tb(id,pw,email,is_admin) values('admin','admin','admin@admin',0);
 insert into user_tb(id,pw,email) values('abc','1111','abc@a.com');
 insert into user_tb(id,pw,email) values('php','2222','php@php.com');
 insert into user_tb(id,pw,email) values('java','3333','java@java.com');
@@ -53,8 +55,8 @@ insert into category_tb(category_nm) values('Laravel');
 insert into category_tb(category_nm) values('Eclips');
 
 ##게시글 테이블 더미 데이터
-insert into contents_tb(title,content,user_no,category_no,write_dt) values('test','DOC for test',1,1,now());
-insert into contents_tb(title,content,user_no,category_no,write_dt) values('php','php is awesome',2,2,now());
+insert into contents_tb(title,content,user_no,category_no,write_dt) values('test','DOC for test',2,1,now());
+insert into contents_tb(title,content,user_no,category_no,write_dt) values('php','php is awesome',4,2,now());
 insert into contents_tb(title,content,user_no,category_no,write_dt) values('how','coding is fun',3,1,now());
 insert into contents_tb(title,content,user_no,category_no,write_dt) values('testtt','umm..',3,4,now());
 insert into contents_tb(title,content,user_no,category_no,write_dt) values('tseses','wow..',2,5,now());
