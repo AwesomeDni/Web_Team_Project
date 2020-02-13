@@ -5,10 +5,13 @@ session_start();
 <head>
 <title>home page</title>
 <meta http-equiv="content-type" content="txt/html" ; charset="utf-8">
-</head>
+
 <style>
-body {text-align: center;}
+    body {
+        text-align: center;
+    }
 </style>
+</head>
 <body>
 <h2>Home Page<h2>
 <hr>
@@ -18,6 +21,8 @@ if(!isset($_SESSION['id'])){
 ?>
 <font size="4">비회원 접속</font>
 <p>로그인해주세요.</p>
+<h4>마이페이지는 로그인 후 사용해주세요.</h4>
+<h4>바로 이동시 이 화면으로 돌아옵니다.</h4>
 <a href="login.html"><button>로그인</button></a>
 <a href="join.html"><button>회원가입</button></a>
 <?php
