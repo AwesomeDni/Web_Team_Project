@@ -195,11 +195,19 @@ if($id==$writer)//글 작성자만 수정 및 삭제 가능
 <div class='category'>
     <ul>
         <a href="list.php?category=0"><li><b>전체글보기</b></li></a>
-        <a href="list.php?category=1"><li>PHP</li></a>
-        <a href="list.php?category=2"><li>JAVA</li></a>
-        <a href="list.php?category=3"><li>PYTHON</li></a>
-        <a href="list.php?category=4"><li>Laravel</li></a>
-        <a href="list.php?category=5"><li>Eclips</li></a>
+        <?php
+        try
+        {   $query = "SELECT * from category_tb";
+            $stmh = $pdo->prepare($query);
+            $stmh->execute();
+        }
+        catch(PDOException $e){ print 'err: '.$e->getMessage(); }
+        while($row=$stmh->fetch(PDO::FETCH_ASSOC))
+        {   $cg_no = $row['category_no'];
+            $cg_nm = $row['category_nm'];
+            print "<a href='list.php?category=$cg_no'><li>$cg_nm</li></a>";
+        }
+        ?>
     </ul>
 </div>
 <br><br>

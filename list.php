@@ -29,6 +29,7 @@
     </div>
 </header>
 <hr>
+<div class="main">
 <div class='main_content'>
 <h1>게시글</h1>
 
@@ -169,12 +170,21 @@ print ($next_page <= $total_page) ? "<a href='".$_SERVER['PHP_SELF']."?page=$nex
 <div class='category'>
     <ul>
         <a href="list.php?category=0"><li><b>전체글보기</b></li></a>
-        <a href="list.php?category=1"><li>PHP</li></a>
-        <a href="list.php?category=2"><li>JAVA</li></a>
-        <a href="list.php?category=3"><li>PYTHON</li></a>
-        <a href="list.php?category=4"><li>Laravel</li></a>
-        <a href="list.php?category=5"><li>Eclips</li></a>
+        <?php
+        try
+        {   $query = "SELECT * from category_tb";
+            $stmh = $pdo->prepare($query);
+            $stmh->execute();
+        }
+        catch(PDOException $e){ print 'err: '.$e->getMessage(); }
+        while($row=$stmh->fetch(PDO::FETCH_ASSOC))
+        {   $cg_no = $row['category_no'];
+            $cg_nm = $row['category_nm'];
+            print "<a href='list.php?category=$cg_no'><li>$cg_nm</li></a>";
+        }
+        ?>
     </ul>
+</div>
 </div>
 </body>
 </html>
