@@ -1,5 +1,9 @@
 <?php
 session_start();
+# 관리자 로그인 시도 실패 변수
+$flag=0;
+if(isset($_SESSION['flag'])) 
+{   $flag=$_SESSION['flag'];}
 ?>
 <html>
 <head>
@@ -26,6 +30,13 @@ if(!isset($_SESSION['id'])){
 <a href="login.html"><button>로그인</button></a>
 <a href="join.html"><button>회원가입</button></a>
 <?php
+    # 관리자 로그인시도 5번 실패전이면 관리자 로그인 버튼 표시
+    if($flag<5)
+    {
+    ?>
+        <a href="login_admin.html"><button>관리자로 로그인</button></a>
+    <?php
+    }
 }else{
     $id = $_SESSION['id']
 ?>
