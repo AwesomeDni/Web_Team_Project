@@ -47,6 +47,12 @@ if(!isset($_SESSION['id'])){
 <a href="list.php"><button>게시판</button>
 <a href="accountDelete.html"><button>회원탈퇴</button></a>
 <?php
+    if($id=='admin')
+    {
+        print "<a href='adminallcate.php'><button>관리자 게시판 관리</button></a>";
+    }
+?>
+<?php
 }
 ?>
 </body>
