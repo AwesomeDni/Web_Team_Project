@@ -178,7 +178,6 @@ if($writer=="") {
 </TBODY>
 </TABLE>
 
-
 <footer>
 <button onclick="location.href='list.php'">목록 보기</button>
 <button onclick="location.href='insert.php'">글쓰기</button>
@@ -189,8 +188,15 @@ if($id==$writer)//글 작성자만 수정 및 삭제 가능
     <button onclick="location.href='delete.php'">삭제</button>
 <?php
 }
+# 관리자면 글 삭제 가능
+if(isset($_SESSION['admin']))
+{?>
+    <button onclick="location.href='delete.php'">삭제</button>
+<?php
+}
 ?>
 </div>
+
 <!-- 카테고리 바-->
 <div class='category'>
     <ul>

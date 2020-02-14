@@ -56,6 +56,7 @@ else
     {   $_SESSION['id']=$id;
         if(isset($_SESSION['id']))
         {   $_SESSION['flag']=0;
+            $_SESSION['admin']=1;
             print "<script>location.href='main.php';</script>";   
         }
         else
