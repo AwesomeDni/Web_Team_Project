@@ -178,7 +178,6 @@ if($writer=="") {
 </TBODY>
 </TABLE>
 
-
 <footer>
 <button onclick="location.href='list.php'">목록 보기</button>
 <button onclick="location.href='insert.php'">글쓰기</button>
@@ -189,17 +188,32 @@ if($id==$writer)//글 작성자만 수정 및 삭제 가능
     <button onclick="location.href='delete.php'">삭제</button>
 <?php
 }
+# 관리자면 글 삭제 가능
+if(isset($_SESSION['admin']))
+{?>
+    <button onclick="location.href='delete.php'">삭제</button>
+<?php
+}
 ?>
 </div>
+
 <!-- 카테고리 바-->
 <div class='category'>
     <ul>
         <a href="list.php?category=0"><li><b>전체글보기</b></li></a>
-        <a href="list.php?category=1"><li>PHP</li></a>
-        <a href="list.php?category=2"><li>JAVA</li></a>
-        <a href="list.php?category=3"><li>PYTHON</li></a>
-        <a href="list.php?category=4"><li>Laravel</li></a>
-        <a href="list.php?category=5"><li>Eclips</li></a>
+        <?php
+        try
+        {   $query = "SELECT * from category_tb";
+            $stmh = $pdo->prepare($query);
+            $stmh->execute();
+        }
+        catch(PDOException $e){ print 'err: '.$e->getMessage(); }
+        while($row=$stmh->fetch(PDO::FETCH_ASSOC))
+        {   $cg_no = $row['category_no'];
+            $cg_nm = $row['category_nm'];
+            print "<a href='list.php?category=$cg_no'><li>$cg_nm</li></a>";
+        }
+        ?>
     </ul>
 </div>
 <br><br>

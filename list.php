@@ -29,6 +29,7 @@
     </div>
 </header>
 <hr>
+<div class="main">
 <div class='main_content'>
 <h1>게시글</h1>
 
@@ -37,6 +38,22 @@
 include('db_conn.php');
 $pdo = DB_conn();
 
+# 관리자 체크
+try
+{   $query = "SELECT is_admin from user_tb where id='$id'";
+    $stmh = $pdo->prepare($query);
+    $stmh->execute();
+}
+catch(PDOException $e){print 'err: '.$e->getMessage();}
+$row = $stmh->fetch(PDO::FETCH_ASSOC);
+$power = $row['is_admin'];
+if($power==0)
+{?>
+    <form action="delete.php" method="POST">
+        <input type="submit" value="선택삭제">
+<?php
+}
+
 // 페이지 설정
 $page_set = 10; // 한페이지 줄수
 $block_set = 5; // 한페이지 블럭수
@@ -44,6 +61,7 @@ $block_set = 5; // 한페이지 블럭수
 $category = 0;
 $_SESSION['category'] = $category;
 $category_nm = '';
+
 if(isset($_GET['category']))
 {   $category = $_GET['category'];
     $_SESSION['category'] = $category;
@@ -91,12 +109,12 @@ $limit_idx = ($page - 1) * $page_set; // 글 시작위치
 # 게시글 불러오기
 try
 {   //쿼리문 작성
-    if($category>0)
+    if($category>0) // 선택한 카테고리가 있으면
     {   $query = "SELECT * from list_view where category_no=$category order by content_no desc limit $limit_idx, $page_set";
         $stmh=$pdo->prepare($query); //sql문을 인잭션으로 부터 보호하기위한 처리
         $stmh->execute();
         ?>
-        <script>
+        <script> // 카테고리 이름으로 게시판 이름 변경
             $(document).ready(function(){
                 $("h1").text("<?= $category_nm ?>");
             });
@@ -120,16 +138,33 @@ catch(PDOException $e)
     </tr>
 <?php
 # 게시글 리스트 출력
-while($row=$stmh->fetch(PDO::FETCH_ASSOC))
-{   print "<tr>";
-    print "<td align=center>" . $row['content_no'] . "</td>";
-    print "<td width=500px><a href='show.php?content_no=". $row['content_no'] ."'>" . $row['title'] . "</a></td>";
-    print "<td align=center>".$row['id']."</td>";
-    print "<td align=center>".$row['view_cnt']."</td>";
-    $date = $row['write_dt'];
-    $dateVal = substr($date,0,10);
-    print "<td align=center>".$dateVal."</td>";
-    print "</tr>";
+## 관리자면 체크박스 표시
+if($power==0)
+{   while($row=$stmh->fetch(PDO::FETCH_ASSOC))
+    {   print "<tr>";
+        print "<td align=center><input type='checkbox' name='check[]' value='".$row['content_no']."'>" . $row['content_no'] . "</td>";
+        print "<td width=500px><a href='show.php?content_no=". $row['content_no'] ."'>" . $row['title'] . "</a></td>";
+        print "<td align=center>".$row['id']."</td>";
+        print "<td align=center>".$row['view_cnt']."</td>";
+        $date = $row['write_dt'];
+        $dateVal = substr($date,0,10);
+        print "<td align=center>".$dateVal."</td>";
+        print "</tr>";
+    }    
+}
+## 아니면
+else
+{   while($row=$stmh->fetch(PDO::FETCH_ASSOC))
+    {   print "<tr>";
+        print "<td align=center>" . $row['content_no'] . "</td>";
+        print "<td width=500px><a href='show.php?content_no=". $row['content_no'] ."'>" . $row['title'] . "</a></td>";
+        print "<td align=center>".$row['id']."</td>";
+        print "<td align=center>".$row['view_cnt']."</td>";
+        $date = $row['write_dt'];
+        $dateVal = substr($date,0,10);
+        print "<td align=center>".$dateVal."</td>";
+        print "</tr>";
+    }
 }
 ?>
 </table>
@@ -169,12 +204,21 @@ print ($next_page <= $total_page) ? "<a href='".$_SERVER['PHP_SELF']."?page=$nex
 <div class='category'>
     <ul>
         <a href="list.php?category=0"><li><b>전체글보기</b></li></a>
-        <a href="list.php?category=1"><li>PHP</li></a>
-        <a href="list.php?category=2"><li>JAVA</li></a>
-        <a href="list.php?category=3"><li>PYTHON</li></a>
-        <a href="list.php?category=4"><li>Laravel</li></a>
-        <a href="list.php?category=5"><li>Eclips</li></a>
+        <?php
+        try
+        {   $query = "SELECT * from category_tb";
+            $stmh = $pdo->prepare($query);
+            $stmh->execute();
+        }
+        catch(PDOException $e){ print 'err: '.$e->getMessage(); }
+        while($row=$stmh->fetch(PDO::FETCH_ASSOC))
+        {   $cg_no = $row['category_no'];
+            $cg_nm = $row['category_nm'];
+            print "<a href='list.php?category=$cg_no'><li>$cg_nm</li></a>";
+        }
+        ?>
     </ul>
+</div>
 </div>
 </body>
 </html>
