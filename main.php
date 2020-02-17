@@ -50,6 +50,7 @@ if(!isset($_SESSION['id'])){
     if($id=='admin')
     {
         print "<a href='adminallcate.php'><button>관리자 게시판 관리</button></a>";
+        print "<a href='usrMgmt.php'><button>관리자 유저 관리</button></a>";
     }
 ?>
 <?php
