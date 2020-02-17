@@ -38,19 +38,27 @@ if(!isset($_SESSION['id'])){
     <?php
     }
 }else{
-    $id = $_SESSION['id']
-?>
-<font size="5">회원접속</font>
-<p><?=$id?>님 환영합니다.</p>
-<a href="logout.php"><button>로그아웃</button></a>
-<a href="mypage.php"><button>마이페이지</button>
-<a href="list.php"><button>게시판</button>
-<a href="accountDelete.html"><button>회원탈퇴</button></a>
-<?php
-    if($id=='admin')
+    $id = $_SESSION['id'];
+
+    if($id!='admin')
     {
-        print "<a href='adminallcate.php'><button>관리자 게시판 관리</button></a>";
-        print "<a href='userMgmt.php'><button>관리자 유저 관리</button></a>";
+?>
+        <font size="5">회원접속</font>
+        <p><?=$id?>님 환영합니다.</p>
+        <a href="logout.php"><button>로그아웃</button></a>
+        <a href="mypage.php"><button>마이페이지</button></a>
+        <a href="list.php"><button>게시판</button></a>
+        <a href="accountDelete.html"><button>회원탈퇴</button></a>
+<?
+    }
+    else if($id == 'admin')
+    {
+?>      <font size="5">관리자접속</font><BR><BR>
+        <a href='logout.php'><button>로그아웃</button></a> 
+        <a href='list.php'><button>게시판</button></a>
+        <a href='adminallcate.php'><button>관리자 게시판 관리</button></a>
+        <a href='userMgmt.php'><button>관리자 유저 관리</button></a>
+<?
     }
 ?>
 <?php
