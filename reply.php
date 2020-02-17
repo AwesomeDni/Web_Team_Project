@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once('db_conn.php');
 $dbo = DB_conn();
 $cno =$_GET['content_no'];
@@ -34,16 +35,25 @@ catch(PDOException $e){
 }
 while($coment_row=$coment_stt->fetch(PDO::FETCH_ASSOC))
     {
-        print $coment_row['coment_no'];
-        print $coment_row['coment'];
-        print $coment_row['user_no'];
-        print $coment_row['content_no'];
-        print $coment_row['write_dt'];
+        echo "<table>
+            <tr>
+                <td>작성자</td>
+                <td>{$coment_row['user_no']}</td>
+            </tr>
+            <tr>
+                <td>내용</td>
+                <td>{$coment_row['coment']}</td>
+            </tr>
+            <tr>
+                <td>날짜</td>
+                <td>{$coment_row['write_dt']}</td>
+            </tr>
+            </table>";
+        
+        //$coment_row['coment_no'];
+        //$coment_row['coment'];
+        //$coment_row['user_no'];
+        //$coment_row['content_no'];
+        //$coment_row['write_dt'];
     }
-if(!isset($_SESSION['user_id'])){
-    $id = 'guest';
-}
-else{
-    $id=$_SESSION['user_id'];
-}
 ?>
