@@ -33,7 +33,7 @@
 <div>
     <form action="list.php" method="get" autocomplete="off">
         <input type="text" name="search">
-        <input type="hidden" name="category" value="<?= $_GET['category']?>">
+        <input type="hidden" name="category" value="<?= isset($_GET['category'])?$_GET['category']:0  ?>">
         <input type="submit" value="찾기">
     </form>
 </div>
