@@ -4,16 +4,15 @@ session_start();
 require_once("db_conn.php");
 
 $pdo = DB_conn();
-$id=$_POST['id'];
 $pw=crypt($_POST['pw'],crypt($_POST['pw'],'abc'));
 $email=$_POST['email'];
 $check=0;
 
-
 if(isset($_POST['delete']) && $_POST['delete']=='NO'){
+    print "<script>alert('회원탈퇴 취소')</script>";
     header('location: ./accountDelete.html');
 }else if (isset($_POST['delete']) && $_POST['delete']=='default'){
-    print "탈퇴 진행상황에 대한 정보 전달에 실패하였습니다. 다시 시도해주세요.";
+    print "<script>alert('로그인해주세요. 탈퇴 진행상황에 대한 정보 전달에 실패하였습니다. 관리자에게 문의 바랍니다.');</script>";
     header('location: ./accountDelete.html');
 }else if (isset($_POST['delete']) && $_POST['delete']=='YES'){
 
@@ -21,7 +20,10 @@ if(isset($_POST['delete']) && $_POST['delete']=='NO'){
 if(!isset($_SESSION['id'])){
     print "<script>alert('로그인해주세요.');</script>";
     header('location: ./main.php');
+}else{
+    $id=$_POST['id'];
 }
+
 
 #id확인(일치시 정보 갖고옴)
 if($id!=$_SESSION['id']){
@@ -39,8 +41,12 @@ if($id!=$_SESSION['id']){
 }
 
 #id 맞을때 갖고온 정보로 email과 pw맞는지 확인. 일치하면 회원정보 삭제 진행
+## admin 삭제 시도시 돌아감
 if(!$count){
     print '해당 계정의 정보 없음';
+}else if($id == 'admin'){
+    print "<script>alert('관리자 계정은 삭제할 수 없습니다.');</script>";
+    print "<script>location.href='accountDelete.html';</script>";
 }else{
     while($row=$stmh->fetch(PDO::FETCH_ASSOC)){
         if($row['pw']!=$pw || $row['email']!=$email){
