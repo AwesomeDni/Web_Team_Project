@@ -4,9 +4,11 @@
 
     $pdo=DB_conn();
     $id=$_SESSION['id'];
-    $category = 0;
-    $_SESSION['category'] = $category;
-    $category_nm =  $_POST['category_nm'];
+    if(isset($_POST['category_nm']))
+    {   $category_nm =  $_POST['category_nm'];  }
+
+    $flag=1;
+    
 ?>
 <html>
     <head>
@@ -21,7 +23,7 @@
                 print "<br>";
                 print "당신은 관리자입니다.";
                 print "<br>";
-            print "카테고리 관리는 아래에서 해주세요.";
+                print "카테고리 관리는 아래에서 해주세요.";
                 print '<br>';
             }
             else{}
@@ -50,7 +52,7 @@
             }
             
             function chk_delete(){
-
+                <?php $flag=0; ?>
                 if(cateform.category_nm.value=='')
                 {   
                     alert ('카테고리이름을 입력해주세요');
@@ -59,15 +61,16 @@
                 else{
                     var answer;
                     answer=confirm('정말로 삭제하시겠습니까? 원하시는 경우 확인을 눌러주세요.');
-                    if(answer=true){
-                        window.open('deletecate.php','삭제창','height=400, width=400','삭제완료');
+                    if(answer){
+                        var cate=cateform.category_nm.value;
+                        window.open('deletecate.php?category_nm='+cate,'삭제창','height=400px, width=800px','삭제완료');
                     }
-                    return false;
                 }
             }
             //쿼리문
             <?php
-                try
+            if($flag)
+            {   try
                 {
                     $sql="SELECT * FROM category_tb WHERE category_nm=:category_nm ";
                     $stmh=$pdo->prepare($sql);
@@ -80,9 +83,7 @@
                 {
                     print 'error:'.$Exception->getMessage();
                 }
-            ?>
             //DB에 없거나 빈칸이 없으면 인서트
-            <?php
                 if(!$countCG && $category_nm!=NULL)
                 {
                     try
@@ -104,6 +105,7 @@
                         print 'error:'.$Exception->getMessage();
                     }
                 }
+            }
             ?>
        </script>
         </nav>
