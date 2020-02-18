@@ -1,5 +1,4 @@
 <?php
-session_start();
 require_once('db_conn.php');
 $dbo = DB_conn();
 $cno =$_GET['content_no'];
@@ -49,7 +48,20 @@ while($coment_row=$coment_stt->fetch(PDO::FETCH_ASSOC))
                 <td>{$coment_row['write_dt']}</td>
             </tr>
             </table>";
-        
+                $id=$_SESSION['id'];
+                $writer=$coment_row['user_no'];
+                if($id==$writer){//글 작성자만 수정 및 삭제 가능
+                ?>
+                <button onclick="location.href='replyupdate.php'">수정</button>
+                <button onclick="location.href='replydelete.php'">삭제</button>
+                <?php
+                }
+                # 관리자면 글 삭제 가능
+                else if(isset($_SESSION['admin'])){
+                ?>
+                <button onclick="location.href='replydelete.php'">삭제</button>
+                <?php
+            }
         //$coment_row['coment_no'];
         //$coment_row['coment'];
         //$coment_row['user_no'];
