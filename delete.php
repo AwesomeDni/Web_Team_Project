@@ -23,7 +23,7 @@ if(isset($_POST['check']))
         catch(PDOException $Exception)//에러 발생시 $Exception이라는 이름으로 PDO예외 처리 객체 생성
         {   print "error:".$Exception->getMessage();  }    
     }
-    if($stmh){
+    if($count){
         echo "<script> alert('삭제 성공'); </script>";
     }
     else{
@@ -31,7 +31,7 @@ if(isset($_POST['check']))
     }
 }
 # show.php에서 삭제시
-else
+elseif(isset($_SESSION['content_no']))
 {   $cno = $_SESSION['content_no'];
     try
     {   $sql = "DELETE FROM contents_tb WHERE content_no= :cno"; 
@@ -43,14 +43,16 @@ else
     catch(PDOException $Exception)//에러 발생시 $Exception이라는 이름으로 PDO예외 처리 객체 생성
     {   print "error:".$Exception->getMessage();  }
 
-    if($stmh){
+    if($count){
         echo "<script> alert('삭제 성공'); </script>";
     }
     else{
         echo "<script> alert('삭제 실패'); </script>";
     }
 }
+else
+{   echo "<script> alert('선택한 글이 없습니다.'); </script>";  }
 ?>
-<meta http-equiv='refresh' content='0, list.php'>   
+<meta http-equiv='refresh' content='0, list.php'>
 </BODY>
 </HTML>
