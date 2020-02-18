@@ -38,6 +38,7 @@
             <input type="text" name="category_nm" autocomplete="off" placeholder="카테고리 이름을 입력하세요"><br>
             <input type="submit" name="createcate" value="카테고리 추가" onclick="chk_category();"><br>
             <input type="submit" name="deletecate" value="카테고리 삭제" onclick="chk_delete();"><br>
+            <input type="hidden" name="flag" value="1";> 
             <hr>
             <button><a href="list.php">전체 게시글로</a></button><br>
             <button><a href="main.php">메인 화면으로</a></button>
@@ -52,7 +53,7 @@
             }
             
             function chk_delete(){
-                <?php $flag=0; ?>
+                cateform.flag=0;
                 if(cateform.category_nm.value=='')
                 {   
                     alert ('카테고리이름을 입력해주세요');
@@ -64,11 +65,15 @@
                     if(answer){
                         var cate=cateform.category_nm.value;
                         window.open('deletecate.php?category_nm='+cate,'삭제창','height=400px, width=800px','삭제완료');
+                        cateform.category_nm.value=null;
                     }
                 }
             }
             //쿼리문
             <?php
+            if(isset($_POST['flag']))
+            {   $flag=$_POST['flag'];   }
+            
             if($flag)
             {   try
                 {
