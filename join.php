@@ -50,14 +50,20 @@ try{
    print 'error:'.$Exception->getMessage();
 } 
 
-if($countID){
-    print "중복되는 아이디입니다.";
+##조건 확인 후 회원가입 쿼리문 진행
+if($id=='admin'){
+    print "<script>alert('쓸 수 없는 아이디입니다.');</script>";
+    print "<script>location.href='join.html';</script>";
+}elseif($countID){
+    print "<script>alert('중복되는 아이디입니다.');</script>";
+    print "<script>location.href='join.html';</script>";
 }else if($countEmail){
-    print "중복되는 이메일입니다.";
+    print "<script>alert('중복되는 이메일입니다.');</script>";
+    print "<script>location.href='join.html';</script>";
 }else{
     try{
         $pdo->beginTransaction();
-        $sql="INSERT INTO user_tb (id,pw,email) VALUES (:id,:pw,:email)";
+        $sql="INSERT INTO user_tb (id,pw,email,is_admin) VALUES (:id,:pw,:email,0)";
         $stmh=$pdo->prepare($sql);
         $stmh->bindValue(':id',$id,PDO::PARAM_STR);
         $stmh->bindValue(':pw',$pw,PDO::PARAM_STR);
