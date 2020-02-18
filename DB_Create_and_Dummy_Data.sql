@@ -1,4 +1,5 @@
 ##DB 생성
+drop database if exists web_project;
 create database web_project default character set= utf8 collate utf8_general_ci ;
 use web_project;
 
@@ -42,10 +43,10 @@ create table coments_tb(
 )default charset = utf8;
 
 ##회원 테이블 더미 데이터
-insert into user_tb(id,pw,email,is_admin) values('admin','admin','admin@admin',0);
-insert into user_tb(id,pw,email) values('abc','1111','abc@a.com');
-insert into user_tb(id,pw,email) values('php','2222','php@php.com');
-insert into user_tb(id,pw,email) values('java','3333','java@java.com');
+insert into user_tb(id,pw,email,is_admin) values('admin','admin','admin@admin',1);
+insert into user_tb(id,pw,email,is_admin) values('abc','1111','abc@a.com',0);
+insert into user_tb(id,pw,email,is_admin) values('php','2222','php@php.com',0);
+insert into user_tb(id,pw,email,is_admin) values('java','3333','java@java.com',0);
 
 ##카테고리 테이블 더미contents_tb 데이터
 insert into category_tb(category_nm) values('PHP');
@@ -69,7 +70,8 @@ create view show_view as select content_no,title,content,id,write_dt,view_cnt fr
 select * from show_view;
 create view list_view as select content_no,title,id,write_dt,view_cnt,category_no from contents_tb,user_tb where contents_tb.user_no=user_tb.user_no;
 select * from list_view;
-drop view list_view;
+##drop view list_view;
+
 ##삭제 테스트
 #delete from contents_tb where content_no = 2;
 #delete from coments_tb whuser_tbere coment_no = 2;
