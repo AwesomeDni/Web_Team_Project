@@ -70,8 +70,18 @@ create view show_view as select content_no,title,content,id,write_dt,view_cnt fr
 select * from show_view;
 create view list_view as select content_no,title,id,write_dt,view_cnt,category_no from contents_tb,user_tb where contents_tb.user_no=user_tb.user_no;
 select * from list_view;
+<<<<<<< HEAD
 ##drop view list_view;
 
+=======
+create view coment_view as select coment_no, coment, coments_tb.write_dt, id, coments_tb.content_no 
+from coments_tb,user_tb,contents_tb 
+where user_tb.user_no=coments_tb.user_no 
+and contents_tb.content_no=coments_tb.content_no;
+select * from coment_view;
+
+drop view list_view;
+>>>>>>> ba8bd207f350c9172f2f2a76e7a46812ee40c380
 ##삭제 테스트
 #delete from contents_tb where content_no = 2;
 #delete from coments_tb whuser_tbere coment_no = 2;
