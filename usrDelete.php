@@ -5,7 +5,6 @@ require_once("db_conn.php");
 
 $pdo = DB_conn();
 $id = '';
-$del_usr_id='';
 
 if(isset($_SESSION['id']))
 {
@@ -49,24 +48,29 @@ else
     else
     {
         ##userMgmt.php에서 받아온 삭제정보 확인
-        if(isset($_GET['action']) && $_GET['action']=='delete' && $_GET['id']!='')
+        if(isset($_POST['usr_del']))
         {
+            $cnt = count($_POST['usr_del']);
+            $del_cnt =0;
             ##유저 정보 삭제 쿼리문
-            try
+            for($i=0; $i<$cnt; $i++)
             {
-                $pdo->beginTransaction();
-                $del_usr_id = $_GET['id'];
-                $sql = 'DELETE from user_tb where id=:id';
-                $stmh=$pdo->prepare($sql);
-                $stmh->bindValue(':id',$del_usr_id,PDO::PARAM_STR);
-                $stmh->execute();
-                $pdo->commit();
-                $del_cnt = $stmh->rowCount();
-            }
-            catch(PDOException $e)
-            {
-                $pdo->rollBack();
-                print "error : ".$e->getMessage();
+                try
+                {
+                    $pdo->beginTransaction();
+                    $del_usr_no = $_POST['usr_del'][$i];
+                    $sql = 'DELETE from user_tb where user_no=:user_no';
+                    $stmh=$pdo->prepare($sql);
+                    $stmh->bindValue(':user_no',$del_usr_no,PDO::PARAM_INT);
+                    $stmh->execute();
+                    $pdo->commit();
+                    $del_cnt += $stmh->rowCount();
+                }
+                catch(PDOException $e)
+                {
+                    $pdo->rollBack();
+                    print "error : ".$e->getMessage();
+                }
             }
         }
         ##삭제정보 정상적으로 오지 않았을때
@@ -80,7 +84,7 @@ else
         if($del_cnt == 0)
         {
             print "<script>alert('유저 정보 삭제에 실패하였습니다.');</script>";
-            print "<script>location.href='userMgmt.php';</script>";
+            //print "<script>location.href='userMgmt.php';</script>";
         }
         else
         {
