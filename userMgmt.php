@@ -1,10 +1,19 @@
 <html>
 <head>
 <title>유저 관리</title>
+<style>
+    a {text-decoration:none; }
+</style>
+</head>
 <body>
 <a href="main.php"><button>홈으로</button></a>
 <br>
 <hr>
+<!--검색창-->
+<form name="search_frm" action="userMgmt.php" method="get" autocomplete="off">
+    검색 : <input type="text" name="search">
+    <input type="submit" value="찾기">
+</form>
 <!--정렬창-->
 <form name="sort_frm" method="get" action="userMgmt.php">
     <input type="radio" name="sort" value="time_asc">처음 가입 
@@ -15,11 +24,6 @@
     <input type="radio" name="sort" value="email_desc">이메일 역순 
     <button type="submit" >정렬</button>
     <a href="userMgmt.php"><button>정렬 초기화</button></a>
-</form>
-<!--검색창-->
-<form name="search_frm" action="userMgmt.php" method="get" autocomplete="off">
-    <input type="text" name="search">
-    <input type="submit" value="찾기">
 </form>
 <?php
 session_start();
@@ -73,7 +77,8 @@ try
 catch(PDOException $e)
 {   print 'err: '. $e->getMessage();   }
 
-#페이징 구현 변수
+
+##페이징 구현 변수
 $usr_cnt_row=$usr_cnt_stmh->fetch(PDO::FETCH_ASSOC);
 $total = $usr_cnt_row['total']; //전체유저수
 $page = 1;
@@ -99,10 +104,20 @@ if($total_page<=$e_page){
 // 쿼리문에서 시작포인트부터 $list(페이지당 데이터수)만큼 읽어오면 한 페이지에 뿌릴 데이터만 갖고옴
 $s_point = ($page-1)*$list; 
 
+$prev_page = $page-1;//[이전] 버튼
+if($prev_page<=0){
+    $prev_page = 1;
+}
+
+$next_page = $page+1; // 다음페이지
+if($next_page >= $total_page){
+    $next_page = $total_page;
+}
+
 
 ##유저 조회 쿼리문(ADMIN은 제외)
 try
-{   $usr_sql = "SELECT * from user_tb where is_admin=1 order by user_no desc";
+{   $usr_sql = "SELECT * from user_tb where is_admin=1 order by user_no desc limit $s_point,$list";
     $usr_cnt=0;
     if(isset($_GET['search'])){
         $key = '%'.$_GET['search'].'%';
@@ -175,25 +190,45 @@ else
                 print "<td align='center'>".htmlspecialchars($usr_row['email'])."</td>";
                 print "</tr>\n";
             }
-            print "<input type=submit name='del' value='일괄삭제'";
-            print "</table>";
-            print "</form>";
+            print "<input type=submit name='del' value='일괄삭제'><br><br>";
+            print "</table>\n";
+            print "</form>\n<br>";
         }
     }
 }
 
-##페이징 넘버 노출
-for ($p=$s_page; $p<=$e_page; $p++) {
-?>
-    <a href="<?=$_SERVER['PHP_SELF']?>?page=<?=$p?>"><?=$p?></a>
-<?php
-}
-?>
-<div align="bottom">
-    <a href="<?=$_SERVER['PHP_SELF']?>?page=<?=$s_page-1?>">이전</a>
-    <a href="<?=$_SERVER['PHP_SELF']?>?page=<?=$e_page+1?>">다음</a>
-</div>
 
+##페이징 넘버 노출
+
+if(isset($_GET['search']))
+{
+    print "<a href='".$_SERVER['PHP_SELF']."?search=".$_GET['search']."&page=".$prev_page."'>[이전]</a>";
+    for ($p=$s_page; $p<=$e_page; $p++) 
+    {
+        print "<a href='".$_SERVER['PHP_SELF']."?search=".$_GET['search']."&page=".$p."'> ".$p." </a>";
+    }
+    print " ... <a href='".$_SERVER['PHP_SELF']."?search=".$_GET['search']."&page=".$next_page."'>[다음]</a>";
+}
+else if(isset($_GET['sort']))
+{
+    print "<a href='".$_SERVER['PHP_SELF']."?sort=".$_GET['sort']."&page=".$prev_page."'>[이전]</a>";
+    for ($p=$s_page; $p<=$e_page; $p++) 
+    {
+        print "<a href='".$_SERVER['PHP_SELF']."?sort=".$_GET['sort']."&page=".$p."'> ".$p." </a>";
+    }
+    print " ... <a href='".$_SERVER['PHP_SELF']."?sort=".$_GET['sort']."&page=".$next_page."'>[다음]</a>";
+}
+else
+{
+    print "<a href='".$_SERVER['PHP_SELF']."?page=".$prev_page."'>[이전]</a> ... ";
+    for ($p=$s_page; $p<=$e_page; $p++) 
+    {
+        print "<a href='".$_SERVER['PHP_SELF']."?page=".$p."'> ".$p." </a>";
+    }
+    print " ... <a href='".$_SERVER['PHP_SELF']."?page=".$next_page."'>[다음]</a>";
+}
+
+?>
 
 </body>
 </html>

@@ -63,15 +63,15 @@ if($id=='admin'){
 }else{
     try{
         $pdo->beginTransaction();
-        $sql="INSERT INTO user_tb (id,pw,email,is_admin) VALUES (:id,:pw,:email,0)";
+        $sql="INSERT INTO user_tb (id,pw,email) VALUES (:id,:pw,:email)";
         $stmh=$pdo->prepare($sql);
         $stmh->bindValue(':id',$id,PDO::PARAM_STR);
         $stmh->bindValue(':pw',$pw,PDO::PARAM_STR);
         $stmh->bindValue(':email',$email,PDO::PARAM_STR);
         $stmh->execute();
         $pdo->commit();
-        print "회원가입 완료<br>\n";
-        print "<a href=main.php>홈으로</a>";
+        print "<script>alert('회원가입 완료');</script>";
+        print "<script>location.href='main.php';</script>";
     }catch(PDOException $Exception){
         $pdo->rollBack();
         print 'error:'.$Exception->getMessage();

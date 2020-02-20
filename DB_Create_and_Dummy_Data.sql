@@ -43,10 +43,10 @@ create table coments_tb(
 )default charset = utf8;
 
 ##회원 테이블 더미 데이터
-insert into user_tb(id,pw,email,is_admin) values('admin','admin','admin@admin',1);
-insert into user_tb(id,pw,email,is_admin) values('abc','1111','abc@a.com',0);
-insert into user_tb(id,pw,email,is_admin) values('php','2222','php@php.com',0);
-insert into user_tb(id,pw,email,is_admin) values('java','3333','java@java.com',0);
+insert into user_tb(id,pw,email,is_admin) values('admin','admin','admin@admin',0);
+insert into user_tb(id,pw,email) values('abc','1111','abc@a.com');
+insert into user_tb(id,pw,email) values('php','2222','php@php.com');
+insert into user_tb(id,pw,email) values('java','3333','java@java.com');
 
 ##카테고리 테이블 더미contents_tb 데이터
 insert into category_tb(category_nm) values('PHP');
@@ -77,7 +77,7 @@ where user_tb.user_no=coments_tb.user_no
 and contents_tb.content_no=coments_tb.content_no;
 select * from coment_view;
 
-drop view list_view;
+##drop view list_view;
 ##삭제 테스트
 #delete from contents_tb where content_no = 2;
 #delete from coments_tb whuser_tbere coment_no = 2;
