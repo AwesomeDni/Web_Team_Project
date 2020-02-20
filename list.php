@@ -137,6 +137,7 @@ try
     {   $query = "SELECT * from list_view where title like '%$key%' and category_no=$category order by content_no desc limit $limit_idx, $page_set";
         $stmh=$pdo->prepare($query); //sql문을 인잭션으로 부터 보호하기위한 처리
         $stmh->execute();
+        print $key . ' 검색결과';
         ?>
         <script>// 카테고리 이름으로 게시판 이름 변경
             $(document).ready(function(){
@@ -220,13 +221,30 @@ $prev_block_page = $prev_block * $block_set; // 이전블럭 페이지번호
 //$prev_block_page = $prev_block * $block_set - ($block_set - 1);
 $next_block_page = $next_block * $block_set - ($block_set - 1); // 다음블럭 페이지번호
 // 페이징 화면
-print ($prev_page > 0) ? "<a href='".$_SERVER['PHP_SELF']."?page=$prev_page'>[이전]</a> " : "[이전] ";
-print ($prev_block > 0) ? "<a href='".$_SERVER['PHP_SELF']."?page=$prev_block_page'>...</a> " : "... ";
-for ($i=$first_page; $i<=$last_page; $i++) {   
-    print ($i != $page) ? "<a href='".$_SERVER['PHP_SELF']."?category=$category&page=$i'>$i</a> " : "<b>$i</b> ";
+if(isset($key)) // 검색 키워드가 있을시
+{   print ($prev_page > 0) ? "<a href='".$_SERVER['PHP_SELF']."?search=$key&category=$category&page=$prev_page'>[이전]</a> " : "[이전] ";
+    print ($prev_block > 0) ? "<a href='".$_SERVER['PHP_SELF']."?search=$key&category=$category&page=$prev_block_page'>...</a> " : "... ";    
 }
-print ($next_block <= $total_block) ? "<a href='".$_SERVER['PHP_SELF']."?page=$next_block_page'>...</a> " : "... ";
-print ($next_page <= $total_page) ? "<a href='".$_SERVER['PHP_SELF']."?page=$next_page'>[다음]</a>" : "[다음]";
+else // 아니면
+{   print ($prev_page > 0) ? "<a href='".$_SERVER['PHP_SELF']."?category=$category&page=$prev_page'>[이전]</a> " : "[이전] ";
+    print ($prev_block > 0) ? "<a href='".$_SERVER['PHP_SELF']."?category=$category&page=$prev_block_page'>...</a> " : "... ";}
+
+for ($i=$first_page; $i<=$last_page; $i++) 
+{   if(isset($key)) // 검색 키워드가 있을시
+    {   print ($i != $page) ? "<a href='".$_SERVER['PHP_SELF']."?search=$key&category=$category&page=$i'>$i</a> " : "<b>$i</b> ";   }
+    else // 아니면
+    {   print ($i != $page) ? "<a href='".$_SERVER['PHP_SELF']."?category=$category&page=$i'>$i</a> " : "<b>$i</b> ";}
+    
+}
+if(isset($key)) // 검색 키워드가 있을시
+{   print ($next_block <= $total_block) ? "<a href='".$_SERVER['PHP_SELF']."?search=$key&category=$category&page=$next_block_page'>...</a> " : "... ";
+    print ($next_page <= $total_page) ? "<a href='".$_SERVER['PHP_SELF']."?search=$key&category=$category&page=$next_page'>[다음]</a>" : "[다음]";
+}
+else // 아니면
+{   print ($next_block <= $total_block) ? "<a href='".$_SERVER['PHP_SELF']."?category=$category&page=$next_block_page'>...</a> " : "... ";
+    print ($next_page <= $total_page) ? "<a href='".$_SERVER['PHP_SELF']."?category=$category&page=$next_page'>[다음]</a>" : "[다음]";
+}
+
 ?>
 <button onclick="location.href='insert.php'">글쓰기</button>
 </div>
