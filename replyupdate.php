@@ -1,22 +1,38 @@
+<?php session_start();?>
+<html>
+    <head>
+    <title>댓글 수정</title></head>
+<body>
+
 <?php
 require_once('db_conn.php');
+$dbo=DB_conn();
+$cono = $_GET['coment_no'];
+
+try{
+    $sql="SELECT * FROM coments_tb WHERE coment_no=:cono";
+    $stmh=$dbo->prepare($sql);
+    $stmh->bindValue(':cono', $cono, PDO::PARAM_STR);
+    $stmh->execute();
+    $count=$stmh->rowcount();
+}
+catch(Excpetion $e){
+    print "error:".$e->getMessage();
+}
+if($count<1){
+    print "no have update date!!<br>";
+}
+else{
+    while($row=$stmh->fetch(PDO::FETCH_ASSOC)){?>
+    <h1>댓글 수정하기</h1>
+    <form name="form1" method="post" action="commentedit.php">
+        <textarea name="coment" rows="8" cols="80"><?=htmlspecialchars($row['coment'])?></textarea><br>
+        <input type="hidden" name="coment_no" value="<?=$row['coment_no']?>">
+        <input type="submit" value="댓글수정">
+    </form>
+    <?php
+    }
+}
 ?>
-<!DOCTYPE html>
-<html>
-<head>
-<!DOCTYPE html>
-<!-- 댓글입력창!-->
-<html>
-<head>
-<meta charset="utf-8">
-<title></title>
-</head>
-<body>
-<h1>댓글 수정하기</h1>
-<form action="commentedit.php?coment_no=<?=$_GET['coment_no']?>" method="post">
-<input type="hidden" name="content_no" value="<?=$cno?>">
-<textarea name="coment" rows="8" cols="80"></textarea>
-<input type="submit" value="댓글수정">
-</form>
 </body>
 </html>
