@@ -5,6 +5,22 @@
 <a href="main.php"><button>홈으로</button></a>
 <br>
 <hr>
+<!--정렬창-->
+<form name="sort_frm" method="get" action="userMgmt.php">
+    <input type="radio" name="sort" value="time_asc">처음 가입 
+    <input type="radio" name="sort" value="time_desc">최근 가입 
+    <input type="radio" name="sort" value="id_asc">아이디 순 
+    <input type="radio" name="sort" value="id_desc">아이디 역순 
+    <input type="radio" name="sort" value="email_asc">이메일 순 
+    <input type="radio" name="sort" value="email_desc">이메일 역순 
+    <button type="submit" >정렬</button>
+    <a href="userMgmt.php"><button>정렬 초기화</button></a>
+</form>
+<!--검색창-->
+<form name="search_frm" action="userMgmt.php" method="get" autocomplete="off">
+    <input type="text" name="search">
+    <input type="submit" value="찾기">
+</form>
 <?php
 session_start();
 require_once("db_conn.php");
@@ -37,18 +53,91 @@ catch(PDOException $e)
     print 'error : '.$e->getMessage();
 }
 
+
+##페이징 구현 쿼리문(전체 유저수 세기)
+try
+{   //쿼리문 작성
+    if(isset($_GET['search'])) // 검색시
+    {   $key = '%'.$_GET['search'].'%';
+        $usr_cnt_sql = "SELECT count(user_no) as total FROM user_tb where id like :id";
+        $usr_cnt_stmh=$pdo->prepare($usr_cnt_sql); //sql문을 인잭션으로 부터 보호하기위한 처리
+        $usr_cnt_stmh->bindValue(':id',$key,PDO::PARAM_STR);
+        $usr_cnt_stmh->execute();
+    }
+    else // 없으면
+    {   $usr_cnt_sql = "SELECT count(user_no) as total FROM user_tb";
+        $usr_cnt_stmh=$pdo->prepare($usr_cnt_sql); //sql문을 인잭션으로 부터 보호하기위한 처리
+        $usr_cnt_stmh->execute();
+    }
+}
+catch(PDOException $e)
+{   print 'err: '. $e->getMessage();   }
+
+#페이징 구현 변수
+$usr_cnt_row=$usr_cnt_stmh->fetch(PDO::FETCH_ASSOC);
+$total = $usr_cnt_row['total']; //전체유저수
+$page = 1;
+if(isset($_GET['page'])){
+    $page = $_GET['page'];
+}
+$list = 10; //페이지당 데이터수
+$block = 5;
+
+$total_page = ceil($total/$list); //총 페이지 수
+$total_block = ceil($total_page/$block); //총 블록 수
+$nowBlock = ceil($page/$block); //현재블록
+
+$s_page = ($nowBlock*$block)-($block-1); //블록에서 시작페이지
+if($s_page <= 1){
+    $s_page = 1;
+}
+$e_page=$nowBlock*$block; //블록에서 마지막페이지
+if($total_page<=$e_page){
+    $e_page=$total_page;
+}
+
+// 쿼리문에서 시작포인트부터 $list(페이지당 데이터수)만큼 읽어오면 한 페이지에 뿌릴 데이터만 갖고옴
+$s_point = ($page-1)*$list; 
+
+
 ##유저 조회 쿼리문(ADMIN은 제외)
 try
-{
-    $usr_sql = "SELECT id from user_tb where id not in (:id)";
+{   $usr_sql = "SELECT * from user_tb where is_admin=1 order by user_no desc";
+    $usr_cnt=0;
+    if(isset($_GET['search'])){
+        $key = '%'.$_GET['search'].'%';
+        $usr_sql = "SELECT * from user_tb where is_admin=1 and id like '$key' order by id limit $s_point,$list";
+    }
+    else if(isset($_GET['sort'])){
+        $sort = $_GET['sort'];
+        switch($sort){
+            case 'time_asc':
+                $usr_sql = "SELECT * from user_tb where is_admin=1 order by user_no limit $s_point,$list";
+            break;
+            case 'id_asc':
+                $usr_sql = "SELECT * from user_tb where is_admin=1 order by id limit $s_point,$list";
+            break;
+            case 'id_desc':
+                $usr_sql = "SELECT * from user_tb where is_admin=1 order by id desc limit $s_point,$list";
+            break;
+            case 'email_asc':
+                $usr_sql = "SELECT * from user_tb where is_admin=1 order by email limit $s_point,$list";
+            break;
+            case 'email_desc':
+                $usr_sql = "SELECT * from user_tb where is_admin=1 order by email desc limit $s_point,$list";
+            break;
+            default:
+            $usr_sql = "SELECT * from user_tb where is_admin=1 order by user_no desc limit $s_point,$list";
+        break;
+        }
+    }
     $usr_stmh = $pdo->prepare($usr_sql);
-    $usr_stmh->bindValue(':id',$id,PDO::PARAM_STR);
     $usr_stmh->execute();
     $usr_cnt=$usr_stmh->rowCount();
 }
 catch(PDOException $e)
 {
-    print 'error : '.$e->getMessage();
+    print 'user view error : '.$e->getMessage();
 }
 
 
@@ -70,24 +159,41 @@ else
     {
         if($usr_cnt == 0)
         {
-            print "회원 정보가 없습니다.";
+            print "<br>회원 정보가 없습니다.";
             print "<button><a href=main.php>홈으로</a></button>";
         }
         else
         {
-            print "<table border=1>\n";
-            print "<tr><th>아이디</th><th>삭제</th></tr>\n";
+            print "<form name='usr_del_frm' method='post' action='usrDelete.php'>";
+            print "<table border=1 width='350' cellpadding='8'>\n";
+            print "<tr><th>체크</th><th>아이디</th><th>email</th></tr>\n";
             while($usr_row=$usr_stmh->fetch(PDO::FETCH_ASSOC))
             {
                 print "<tr>\n";
-                print "<td>".htmlspecialchars($usr_row['id'])."</td>\n";
-                print "<td><a href='usrDelete.php?action=delete&id=".$usr_row["id"]."'>삭제</a></td>";
+                print "<td align='center'><input type='checkbox' name='usr_del[]' value='".$usr_row['user_no']."'></td>";
+                print "<td align='center'>".htmlspecialchars($usr_row['id'])."</td>\n";
+                print "<td align='center'>".htmlspecialchars($usr_row['email'])."</td>";
                 print "</tr>\n";
             }
+            print "<input type=submit name='del' value='일괄삭제'";
             print "</table>";
+            print "</form>";
         }
     }
 }
+
+##페이징 넘버 노출
+for ($p=$s_page; $p<=$e_page; $p++) {
 ?>
+    <a href="<?=$_SERVER['PHP_SELF']?>?page=<?=$p?>"><?=$p?></a>
+<?php
+}
+?>
+<div align="bottom">
+    <a href="<?=$_SERVER['PHP_SELF']?>?page=<?=$s_page-1?>">이전</a>
+    <a href="<?=$_SERVER['PHP_SELF']?>?page=<?=$e_page+1?>">다음</a>
+</div>
+
+
 </body>
 </html>
