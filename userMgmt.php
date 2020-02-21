@@ -1,29 +1,58 @@
 <html>
 <head>
-<title>유저 관리</title>
-<style>
-    a {text-decoration:none; }
-</style>
+    <title>유저 관리</title>
+    <style>
+        a {text-decoration:none; }
+        td {text-align:center;}
+    </style>
+    <link rel="stylesheet" href="css/bootstrap.css">
 </head>
 <body>
-<a href="main.php"><button>홈으로</button></a>
+<div class="container">
+<a href="main.php"><button class="btn btn-primary">홈으로</button></a>
+<!--검색창-->
+<div class = 'float-right'>
+<form name="search_frm" action="userMgmt.php" method="get" autocomplete="off">
+    <div class="form-group row">
+    <label for="search">ID 검색&nbsp;&nbsp;&nbsp;</label>
+    <div class="col-xs-2">
+    <input type="text" class="form-control form-control-sm" name="search">
+    </div>
+    &nbsp;&nbsp;<button type="submit" class="btn btn-secondary btn-sm">찾기</button>
+    </div>
+</form>
+</div>
 <br>
 <hr>
-<!--검색창-->
-<form name="search_frm" action="userMgmt.php" method="get" autocomplete="off">
-    검색 : <input type="text" name="search">
-    <input type="submit" value="찾기">
-</form>
 <!--정렬창-->
+
 <form name="sort_frm" method="get" action="userMgmt.php">
-    <input type="radio" name="sort" value="time_asc">처음 가입 
-    <input type="radio" name="sort" value="time_desc">최근 가입 
-    <input type="radio" name="sort" value="id_asc">아이디 순 
-    <input type="radio" name="sort" value="id_desc">아이디 역순 
-    <input type="radio" name="sort" value="email_asc">이메일 순 
-    <input type="radio" name="sort" value="email_desc">이메일 역순 
-    <button type="submit" >정렬</button>
-    <a href="userMgmt.php"><button>정렬 초기화</button></a>
+<div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" name="sort" value="time_asc">
+    <label class="form-check-label">처음 가입</label>
+</div>
+<div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" name="sort" value="time_desc">
+    <label class="form-check-label">최근 가입</label>
+</div>
+<div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" name="sort" value="id_asc">
+    <label class="form-check-label">아이디 순</label>
+</div>
+<div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" name="sort" value="id_desc">
+    <label class="form-check-label">아이디 역순</label>
+</div>
+<div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" name="sort" value="email_asc">
+    <label class="form-check-label">이메일 순 </label>
+</div>
+<div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" name="sort" value="email_desc">
+    <label class="form-check-label">이메일 역순 </label>
+</div>
+    <button type="submit" class="btn btn-secondary btn-sm">정렬</button>
+    <a href="userMgmt.php"><button class="btn btn-secondary btn-sm">정렬 초기화</button></a>
 </form>
 <?php
 session_start();
@@ -174,24 +203,24 @@ else
     {
         if($usr_cnt == 0)
         {
-            print "<br>회원 정보가 없습니다.";
-            print "<button><a href=main.php>홈으로</a></button>";
+            print "<br>회원 정보가 없습니다.<br>\n";
+            print "<button class='btn btn-light'><a href=main.php>홈으로</a></button>";
         }
         else
         {
             print "<form name='usr_del_frm' method='post' action='usrDelete.php'>";
-            print "<table border=1 width='350' cellpadding='8'>\n";
-            print "<tr><th>체크</th><th>아이디</th><th>email</th></tr>\n";
+            print "<table class='table table-striped'>\n";
+            print "<tr><th class='text-center'>체크</th><th class='text-center'>아이디</th><th class='text-center'>email</th></tr>\n";
             while($usr_row=$usr_stmh->fetch(PDO::FETCH_ASSOC))
             {
                 print "<tr>\n";
-                print "<td align='center'><input type='checkbox' name='usr_del[]' value='".$usr_row['user_no']."'></td>";
-                print "<td align='center'>".htmlspecialchars($usr_row['id'])."</td>\n";
-                print "<td align='center'>".htmlspecialchars($usr_row['email'])."</td>";
+                print "<td><input type='checkbox' name='usr_del[]' value='".$usr_row['user_no']."'></td>";
+                print "<td>".htmlspecialchars($usr_row['id'])."</td>\n";
+                print "<td>".htmlspecialchars($usr_row['email'])."</td>";
                 print "</tr>\n";
             }
-            print "<input type=submit name='del' value='일괄삭제'><br><br>";
             print "</table>\n";
+            print "<button type=submit class = 'btn btn-secondary float-right' name='del'>일괄삭제</button>";
             print "</form>\n<br>";
         }
     }
@@ -199,36 +228,45 @@ else
 
 
 ##페이징 넘버 노출
-
+print "<div aria-label='Page navigation example'>\n";
 if(isset($_GET['search']))
 {
-    print "<a href='".$_SERVER['PHP_SELF']."?search=".$_GET['search']."&page=".$prev_page."'>[이전]</a>";
+    print "<ul class='pagination justify-content-center'>\n";
+    print "<li class='page-item'><a class='page-link' href='".$_SERVER['PHP_SELF']."?search=".$_GET['search']."&page=".$prev_page."'>Previous</a></li>\n";
     for ($p=$s_page; $p<=$e_page; $p++) 
     {
-        print "<a href='".$_SERVER['PHP_SELF']."?search=".$_GET['search']."&page=".$p."'> ".$p." </a>";
+        print "<li class='page-item'><a class='page-link' href='".$_SERVER['PHP_SELF']."?search=".$_GET['search']."&page=".$p."'> ".$p." </a></li>\n";
     }
-    print " ... <a href='".$_SERVER['PHP_SELF']."?search=".$_GET['search']."&page=".$next_page."'>[다음]</a>";
+    print "<li class='page-item'><a class='page-link' href='".$_SERVER['PHP_SELF']."?search=".$_GET['search']."&page=".$next_page."'>Next</a></li>\n";
+    print "</ul>";
 }
 else if(isset($_GET['sort']))
 {
-    print "<a href='".$_SERVER['PHP_SELF']."?sort=".$_GET['sort']."&page=".$prev_page."'>[이전]</a>";
+    print "<ul class='pagination justify-content-center'>\n";
+    print "<li class='page-item'><a class='page-link' href='".$_SERVER['PHP_SELF']."?sort=".$_GET['sort']."&page=".$prev_page."'>Previous</a></li>\n";
     for ($p=$s_page; $p<=$e_page; $p++) 
     {
-        print "<a href='".$_SERVER['PHP_SELF']."?sort=".$_GET['sort']."&page=".$p."'> ".$p." </a>";
+        print "<li class='page-item'><a class='page-link' href='".$_SERVER['PHP_SELF']."?sort=".$_GET['sort']."&page=".$p."'> ".$p." </a></li>";
     }
-    print " ... <a href='".$_SERVER['PHP_SELF']."?sort=".$_GET['sort']."&page=".$next_page."'>[다음]</a>";
+    print "<li class='page-item'><a class='page-link' href='".$_SERVER['PHP_SELF']."?sort=".$_GET['sort']."&page=".$next_page."'>Next</a></li>\n";
+    print "</ul>";
 }
 else
 {
-    print "<a href='".$_SERVER['PHP_SELF']."?page=".$prev_page."'>[이전]</a> ... ";
+    print "<ul class='pagination justify-content-center'>\n";
+    print "<li class='page-item'><a class='page-link' href='".$_SERVER['PHP_SELF']."?page=".$prev_page."'>Previous</a></li>\n";
     for ($p=$s_page; $p<=$e_page; $p++) 
     {
-        print "<a href='".$_SERVER['PHP_SELF']."?page=".$p."'> ".$p." </a>";
+        print "<li class='page-item'><a class='page-link' href='".$_SERVER['PHP_SELF']."?page=".$p."'> ".$p." </a></li>\n";
     }
-    print " ... <a href='".$_SERVER['PHP_SELF']."?page=".$next_page."'>[다음]</a>";
+    print "<li class='page-item'><a class='page-link' href='".$_SERVER['PHP_SELF']."?page=".$next_page."'>Next</a></a></li>";
+    print "</ul>";
 }
+print "</nav>"
 
 ?>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.js"></script>
+</div>
 </body>
 </html>
