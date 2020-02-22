@@ -3,13 +3,19 @@
 <html>
 <head>
     <title>Web Project</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="list.css">
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <style>
+    .search
+    {   float: right;   }
+    .category
+    {   position: absolute;   }
+    </style>
 </head>
 <body>
 <header>
-    <div class='header'>
-        <button id="main" onclick="location.href='main.php'">메인</button>
+    <button id="main" onclick="location.href='main.php'">메인</button>
     <?php
     # 로그인 체크
     if(isset($_SESSION['id']))
@@ -18,34 +24,51 @@
         <button onclick="location.href='logout.php'"> 로그아웃</button>
         <a href="mypage.php"><button>마이페이지</button></a>
         <?php
-        print '<div id="name">'.$id.' 님</div>';
+        print '<div class="header">'.$id.' 님</div>';
     }
     else
     {?>
-        <button onclick="location.href='login.html'"> 로그인</button>
+        <meta http-equiv='refresh' content='0, login.html'>
         <?php
     }
     ?>
-    </div>
 </header>
 <hr>
+
+<!-- 카테고리 바-->
+<div class='category'>
+<ul>
+    <a href="list.php?category=0"><li><b>전체글보기</b></li></a>
+    <?php
+    # DB연결
+    include('db_conn.php');
+    $pdo = DB_conn();
+    try
+    {   $query = "SELECT * from category_tb";
+        $stmh = $pdo->prepare($query);
+        $stmh->execute();
+    }
+    catch(PDOException $e){ print 'err: '.$e->getMessage(); }
+    while($row=$stmh->fetch(PDO::FETCH_ASSOC))
+    {   $cg_no = $row['category_no'];
+        $cg_nm = $row['category_nm'];
+        print "<a href='list.php?category=$cg_no'><li>$cg_nm</li></a>";
+    }
+    ?>
+</ul>
+</div>
+
+<div class="container">
+<h3>전체글</h1>
 <!-- 검색 창 -->
-<div>
+<div class="search">
     <form action="list.php" method="get" autocomplete="off">
         <input type="text" name="search">
         <input type="hidden" name="category" value="<?= isset($_GET['category'])?$_GET['category']:0  ?>">
         <input type="submit" value="찾기">
     </form>
 </div>
-<div class="main">
-<div class='main_content'>
-<h1>게시글</h1>
-
 <?php 
-# DB연결
-include('db_conn.php');
-$pdo = DB_conn();
-
 # 관리자 체크
 try
 {   $query = "SELECT is_admin from user_tb where id='$id'";
@@ -57,7 +80,7 @@ $row = $stmh->fetch(PDO::FETCH_ASSOC);
 $power = $row['is_admin'];
 if($power==0)
 {?>
-    <form action="delete.php" method="POST">
+    <form action="delete.php" method="POST" class="select">
         <input type="submit" value="선택삭제">
 <?php
 }
@@ -114,7 +137,7 @@ catch(PDOException $e)
 
 $row=$stmh->fetch(PDO::FETCH_ASSOC);
 $total = $row['total']; // 전체글수
-$page_set = 10; // 한페이지 줄수
+$page_set = 15; // 한페이지 줄수
 $block_set = 5; // 한페이지 블럭수
 $total_page = ceil ($total / $page_set); // 총페이지수(올림함수)
 $total_block = ceil ($total_page / $block_set); // 총블럭수(올림함수)
@@ -141,7 +164,7 @@ try
         ?>
         <script>// 카테고리 이름으로 게시판 이름 변경
             $(document).ready(function(){
-                $("h1").text("<?= $category_nm ?>");
+                $("h3").text("<?= $category_nm ?>");
             });
         </script>
         <?php
@@ -154,7 +177,7 @@ try
         ?>
         <script>// 카테고리 이름으로 게시판 이름 변경
             $(document).ready(function(){
-                $("h1").text("<?= $category_nm ?>");
+                $("h3").text("<?= $category_nm ?>");
             });
         </script>
         <?php
@@ -167,47 +190,57 @@ try
 }
 catch(PDOException $e)
 {   print 'err: '. $e->getMessage();   }
-?>
 
-<table border=1>
-    <tr align="center">
-        <td>글번호</td><td>제목</td><td>작성자</td><td>조회수</td><td>작성일</td>
-    </tr>
-<?php
 # 게시글 리스트 출력
 ## 관리자면 체크박스 표시
 if($power==0)
-{   while($row=$stmh->fetch(PDO::FETCH_ASSOC))
+{?>
+    <table border=1 class='table table-bordered'>
+        <tr align="center">
+            <td>선택</td><td>글번호</td><td>제목</td><td>작성자</td><td>작성일</td><td>조회수</td>
+        </tr>
+    <?php   
+    
+    while($row=$stmh->fetch(PDO::FETCH_ASSOC))
     {   print "<tr>";
-        print "<td align=center><input type='checkbox' name='check[]' value='".$row['content_no']."'>" . $row['content_no'] . "</td>";
+        print "<td align=center><input type='checkbox' name='check[]' value='".$row['content_no']."'></td>";
+        print "<td align=center>" . $row['content_no'] . "</td>";
         print "<td width=500px><a href='show.php?content_no=". $row['content_no'] ."'>" . $row['title'] . "</a></td>";
         print "<td align=center>".$row['id']."</td>";
-        print "<td align=center>".$row['view_cnt']."</td>";
         $date = $row['write_dt'];
         $dateVal = substr($date,0,10);
         print "<td align=center>".$dateVal."</td>";
+        print "<td align=center>".$row['view_cnt']."</td>";
         print "</tr>";
     }    
 }
 ## 아니면
 else
-{   while($row=$stmh->fetch(PDO::FETCH_ASSOC))
+{?>
+    <table border=1 class='table table-bordered'>
+        <tr align="center">
+            <td>글번호</td><td>제목</td><td>작성자</td><td>작성일</td><td>조회수</td>
+        </tr>
+    <?php   
+    while($row=$stmh->fetch(PDO::FETCH_ASSOC))
     {   print "<tr>";
         print "<td align=center>" . $row['content_no'] . "</td>";
         print "<td width=500px><a href='show.php?content_no=". $row['content_no'] ."'>" . $row['title'] . "</a></td>";
         print "<td align=center>".$row['id']."</td>";
-        print "<td align=center>".$row['view_cnt']."</td>";
         $date = $row['write_dt'];
         $dateVal = substr($date,0,10);
         print "<td align=center>".$dateVal."</td>";
+        print "<td align=center>".$row['view_cnt']."</td>";
         print "</tr>";
     }
 }
 ?>
 </table>
 </form>
+
+<!-- 페이징 -->
+<span class="paging">
 <?php
- 
 // 페이지번호 & 블럭 설정
 $first_page = (($block - 1) * $block_set) + 1; // 첫번째 페이지번호
 $last_page = min ($total_page, $block * $block_set); // 마지막 페이지번호
@@ -246,28 +279,8 @@ else // 아니면
 }
 
 ?>
+</span>
 <button onclick="location.href='insert.php'">글쓰기</button>
-</div>
-
-<!-- 카테고리 바-->
-<div class='category'>
-    <ul>
-        <a href="list.php?category=0"><li><b>전체글보기</b></li></a>
-        <?php
-        try
-        {   $query = "SELECT * from category_tb";
-            $stmh = $pdo->prepare($query);
-            $stmh->execute();
-        }
-        catch(PDOException $e){ print 'err: '.$e->getMessage(); }
-        while($row=$stmh->fetch(PDO::FETCH_ASSOC))
-        {   $cg_no = $row['category_no'];
-            $cg_nm = $row['category_nm'];
-            print "<a href='list.php?category=$cg_no'><li>$cg_nm</li></a>";
-        }
-        ?>
-    </ul>
-</div>
 </div>
 </body>
 </html>

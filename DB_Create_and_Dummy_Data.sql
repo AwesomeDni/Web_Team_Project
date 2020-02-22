@@ -66,8 +66,10 @@ insert into contents_tb(title,content,user_no,category_no,write_dt) values('tses
 insert into coments_tb(coment,user_no,content_no,write_dt) values('this too', 2,1,now());
 insert into coments_tb(coment,user_no,content_no,write_dt) values('java also', 3,2,now());
 
-create view show_view as select content_no,title,content,id,write_dt,view_cnt from contents_tb,user_tb where contents_tb.user_no=user_tb.user_no;
+create view show_view as select content_no,title,content,id,write_dt,view_cnt,category_nm from contents_tb,user_tb,category_tb
+where contents_tb.user_no=user_tb.user_no and contents_tb.category_no=category_tb.category_no;
 select * from show_view;
+
 create view list_view as select content_no,title,id,write_dt,view_cnt,category_no from contents_tb,user_tb where contents_tb.user_no=user_tb.user_no;
 select * from list_view;
 
@@ -77,6 +79,7 @@ where user_tb.user_no=coments_tb.user_no
 and contents_tb.content_no=coments_tb.content_no;
 select * from coment_view;
 
+##drop view show_view;
 ##drop view list_view;
 ##삭제 테스트
 #delete from contents_tb where content_no = 2;

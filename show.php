@@ -1,5 +1,6 @@
 <title>Web Project</title>
 <?php session_start(); ?>
+<link rel="stylesheet" href="css/bootstrap.css">
 <link rel="stylesheet" href="show.css">
 <header>
 <button id="main" onclick="location.href='main.php'">메인</button>
@@ -16,18 +17,39 @@ if(isset($_SESSION['id']))
 else
 {   $id='';
 ?>
-	<button onclick="location.href='login.html'"> 로그인</button>
+	<meta http-equiv='refresh' content='0, login.html'>
 <?php
 }
 ?>
 </header>
 <hr>
-<div class="main_content">
-<?php
-#DB연결
-require_once('db_conn.php');
-$pdo = DB_conn();
 
+<!-- 카테고리 바-->
+<div class='category'>
+<ul>
+    <a href="list.php?category=0"><li><b>전체글보기</b></li></a>
+    <?php
+    #DB연결
+    require_once('db_conn.php');
+    $pdo = DB_conn();
+    
+    try
+    {   $query = "SELECT * from category_tb";
+        $stmh = $pdo->prepare($query);
+        $stmh->execute();
+    }
+    catch(PDOException $e){ print 'err: '.$e->getMessage(); }
+    while($row=$stmh->fetch(PDO::FETCH_ASSOC))
+    {   $cg_no = $row['category_no'];
+        $cg_nm = $row['category_nm'];
+        print "<a href='list.php?category=$cg_no'><li>$cg_nm</li></a>";
+    }
+    ?>
+</ul>
+</div>
+<!-- 메인 글-->
+<div class="container">
+<?php
 #사용자가 요청한 문서 번호 획득
 $_SESSION['content_no'] = $content_no = $_GET['content_no'];
 $category = $_SESSION['category'];
@@ -98,7 +120,7 @@ try
 }
 catch(PDOException $e)
 {   print 'err: '. $e->getMessage();
-$pdo->rollBack();
+    $pdo->rollBack();
 }
 while ($row=$stmh->fetch(PDO::FETCH_ASSOC)) {
     $next=$row['next_'];
@@ -143,28 +165,23 @@ catch(PDOException $e)
     $pdo->rollBack();
 }
 ?>
-<TABLE border="1">
+<TABLE class="table table-bordered">
 <TBODY>
-    <TR>
-        <TH>No</TH>
-        <TH width=100px>Title</TH>
-        <TH width=300px>contetnt</TH>
-        <TH width=70px>작성자</TH>
-        <TH>작성일</TH>
-        <TH width=70px>조회수</TH>
-    </TR>
 <?php
 #문서 내용 출력
 $writer='';//작성자 저장하기 위한 변수
 while($row=$stmh->fetch(PDO::FETCH_ASSOC))//PDO::FETCH_ASSOC 결과값을 한 행씩 읽어오는 메소드
 {?>
     <TR>
-        <TD align="center"><?=htmlspecialchars($row['content_no'])?></TD>
-        <TD><?=$row['title']?></TD>
-        <TD><?=nl2br($row['content'])?></TD>
-        <TD><?=$writer=$row['id']?></TD>
+        <TD width="800px"><?=$row['title']?></TD>
+        <TD><?=$row['category_nm']?></TD>
         <TD><?=$row['write_dt']?></TD>
-        <TD><?=$row['view_cnt']?></TD>
+    </TR>
+    <TR>
+        <TD colspan="3"><?=$writer=$row['id']?></TD>
+    </TR>
+    <TR>
+        <TD colspan="3"><?=nl2br($row['content'])?></TD>
     </TR>
 <?php 
 }
@@ -177,8 +194,8 @@ if($writer=="") {
 ?>
 </TBODY>
 </TABLE>
-
-
+</div>
+<div class="container">
 <footer>
 <button onclick="location.href='list.php'">목록 보기</button>
 <button onclick="location.href='insert.php'">글쓰기</button>
@@ -200,26 +217,8 @@ if(isset($_SESSION['admin']))
 }
 ?>
 </div>
-
-<!-- 카테고리 바-->
-<div class='category'>
-    <ul>
-        <a href="list.php?category=0"><li><b>전체글보기</b></li></a>
-        <?php
-        try
-        {   $query = "SELECT * from category_tb";
-            $stmh = $pdo->prepare($query);
-            $stmh->execute();
-        }
-        catch(PDOException $e){ print 'err: '.$e->getMessage(); }
-        while($row=$stmh->fetch(PDO::FETCH_ASSOC))
-        {   $cg_no = $row['category_no'];
-            $cg_nm = $row['category_nm'];
-            print "<a href='list.php?category=$cg_no'><li>$cg_nm</li></a>";
-        }
-        ?>
-    </ul>
-</div>
 <br><br>
+<div class="container">
 <?php require_once('reply.php'); ?>
+</div>
 </footer>
