@@ -276,9 +276,9 @@ for ($i=$first_page; $i<=$last_page; $i++)
     
 }
 if(isset($key)) // 검색 키워드가 있을시
-{   print ($next_page <= $total_page) ? "<a href='".$_SERVER['PHP_SELF']."?search=$key&category=$category&page=$next_block_page'>[다음]</a>" : "[다음]";    }
+{   print ($block < $total_block) ? "<a href='".$_SERVER['PHP_SELF']."?search=$key&category=$category&page=$next_block_page'>[다음]</a>" : "[다음]";    }
 else // 아니면
-{   print ($next_page <= $total_page) ? "<a href='".$_SERVER['PHP_SELF']."?category=$category&page=$next_block_page'>[다음]</a>" : "[다음]";    }
+{   print ($block < $total_block) ? "<a href='".$_SERVER['PHP_SELF']."?category=$category&page=$next_block_page'>[다음]</a>" : "[다음]";    }
 
 ?>
 </span>
