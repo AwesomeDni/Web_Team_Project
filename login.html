@@ -3,32 +3,34 @@
 <head>
     <meta http-equiv="content-type" content="txt/html" ; charset="utf-8">
     <title>login page</title>
-    <style>
-    body {text-align: center; padding: 10px;}
-    div { padding: 5px;}
-    table.center { margin-left:auto; margin-right:auto;}
-    </style>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="user.css">
 </head>
 <body>
-    <h2>Login Page</h2>
-    <a align href="main.php"><button style="float:left;"> 홈으로 </button></a><br>
-    <hr>
-    <form name="login_form" method="POST" action="login.php">
+<div class ="container">
+<a href="main.php"><button class="btn btn-primary "> 홈으로 </button></a><br>
+<div class="d-flex justify-content-center">
+<div class="bg-light">
+    <form name="join_form" method="POST" action="login.php">
+        <div><h2>로그인</h2></div>
         <div>
-            <label for="id"> ID </label>
-            <input type="text" name="id" autocomplete="off">
+            <input type="text" class="form-control-lg" name="id" placeholder="Username" autocomplete="off" aria-describedby="adminHelp">
+            <small id="adminHelp" class="form-text text-muted">
+                ※특정 키워드 입력시 관리자 로그인버튼 활성화
+            </small>
         </div>
         <div>
-            <label for="pw"> PW </label>
-            <input type="password" name="pw" autocomplete="off">
+            <input type="password" class="form-control-lg" name="pw" placeholder="Password" minlength="4" maxlength="8"  autocomplete="off">
         </div>
         <div>
-            <input type="submit" value="LogIn">
+            <a href="join.html" class="btn btn-secondary">회원가입</a>
+            <button type="submit" class="btn btn-success float-right" >로그인</button>
         </div>
     </form>
-    <br>
-    회원가입 : 
-    <a href="join.html"><button> join </button></a> 
-
+</div>
+</div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.js"></script>
 </body>
 </html>

@@ -1,0 +1,11 @@
+div 
+{   padding: 25px;  }
+div .bg-light 
+{
+    overflow:hidden;
+    width: auto; 
+    border-radius: 10px;
+    font-family: "Helvetica Nene", Helvetica;
+}
+h2 
+{   text-align: center; }

@@ -14,6 +14,12 @@ if ($id=="" || $pw == "")
     print "<script>alert('빈칸을 모두 채워주세요.');</script>";
     print "<script>location.href='login.html';</script>";
 }
+else if($id=='admin')
+{
+    $_SESSION['adm_act'] = 1;
+    print "<script>alert('관리자 로그인 버튼이 활성화되었습니다.');</script>";
+    print "<script>location.href='main.php';</script>";
+}
 else
 {##공백 아니라면 해당 아이디로 유저 조회
     try{

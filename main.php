@@ -29,7 +29,7 @@ if(!isset($_SESSION['id']))
     <a href="join.html"><button>회원가입</button></a>
 <?php
  # 관리자 로그인시도 5번 실패전이면 관리자 로그인 버튼 표시
-    if($flag<5)
+    if($flag<5 && isset($_SESSION['adm_act']))
     {
         print "<a href='login_admin.html'><button>관리자로 로그인</button></a>";
     }

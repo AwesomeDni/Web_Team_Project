@@ -1,19 +1,36 @@
-<h2>Login Page</h2>
-<hr>
-<form name="login_form" method="POST" action="login_admin.php">
-    <div>
-        <label for="id"> ID </label>
-        <input type="text" name="id" autocomplete="off">
-    </div>
-    <div>
-        <label for="pw"> PW </label>
-        <input type="password" name="pw" autocomplete="off">
-    </div>
-    <div>
-        <label for="pw2"> PW2 </label>
-        <input type="password" name="pw2" autocomplete="off">
-    </div>
-    <div>
-        <input type="submit" value="LogIn">
-    </div>
-</form>
+<!DOCTYPE html>
+<html>
+<head>
+<title> 관리자 로그인 </title>
+<meta http-equiv="content-type" content="txt/html" ; charset="utf-8">
+<link rel="stylesheet" href="css/bootstrap.css">
+<link rel="stylesheet" href="user.css">
+</head>
+<body>
+<div class ="container">
+<a href="main.php"><button class="btn btn-primary "> 홈으로 </button></a><br>
+<div class="d-flex justify-content-center">
+<div class="bg-light">
+    <form name="join_form" method="POST" action="login_admin.php">
+        <div><h2>Admin Login</h2></div>
+        <div>
+            <input type="text" class="form-control-lg" name="id" placeholder="Admin Name" autocomplete="off">
+        </div>
+        <div>
+            <input type="password" class="form-control-lg" name="pw" placeholder="Admin Password">
+        </div>
+        <div>
+            <input type="password" class="form-control-lg" name="pw2" placeholder="Second Password"  autocomplete="off">
+        </div>
+        <div>
+            <button type="submit" class="btn btn-success float-right" >관리자 로그인</button>
+        </div>
+    </form>
+</div>
+</div>
+</div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.js"></script>
+</body>
+
+</html>

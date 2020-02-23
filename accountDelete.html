@@ -3,11 +3,8 @@
 <head>
     <meta http-equiv="content-type" content="txt/html" ; charset="utf-8">
     <title></title>
-    <style>
-    body {text-align: center; padding: 10px;}
-    div { padding: 5px;}
-    table.center { margin-left:auto; margin-right:auto;}
-    </style>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="user.css">
     <script>
         function confirmation() {
             var check = confirm("회원탈퇴하면 작성한 댓글과 게시글이 모두 사라집니다. 진행하시겠습니까?");
@@ -22,27 +19,30 @@
     </script>
 </head>
 <body>
-    <h2>회원탈퇴 페이지</h2>
-    <hr>
-    본인확인
-    <form name="form" method="POST" action="accountDelete.php">
+<div class ="container">
+<a href="main.php"><button class="btn btn-primary "> 홈으로 </button></a><br>
+<div class="d-flex justify-content-center">
+<div class="bg-light">
+    <form name="join_form" method="POST" action="login.php">
+        <div><h2>회원탈퇴</h2></div>
         <div>
-            <label for="id"> ID </label>
-            <input type="text" name="id" autocomplete="off">
+            <input type="text" class="form-control-lg" name="id" placeholder="Username" autocomplete="off">
         </div>
         <div>
-            <label for="pw"> PW </label>
-            <input type="password" name="pw" autocomplete="off">
+            <input type="password" class="form-control-lg" name="pw" placeholder="Password" minlength="4" maxlength="8"  autocomplete="off">
         </div>
         <div>
-            <label for="email"> E-mail </label>
-            <input type="email" name="email"  placeholder="이메일" autocomplete="off">
+            <input type="email" class="form-control-lg" name="email"  placeholder="E-mail">
         </div>
         <input type="hidden" name="delete" id="delete" value="default">
         <div>
-            <button type ="submit" onclick="confirmation()">탈퇴</button>
+            <button type="submit" class="btn btn-success float-right" onclick="confirmation()">탈퇴</button>
         </div>
     </form>
-    <br>
+</div>
+</div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.js"></script>
 </body>
 </html>
