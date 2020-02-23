@@ -7,31 +7,40 @@
     <link rel="stylesheet" href="list.css">
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <style>
+    .info
+    {   float: right;   }
     .search
     {   float: right;   }
     .category
     {   position: absolute;   }
+    .paging
+    {   position: relative;
+        left: 40%;
+    }
     </style>
 </head>
 <body>
 <header>
     <button id="main" onclick="location.href='main.php'">메인</button>
+    <span class="info">
     <?php
     # 로그인 체크
     if(isset($_SESSION['id']))
     {   $id = $_SESSION['id'];
+        print $id.' 님';
         ?>
         <button onclick="location.href='logout.php'"> 로그아웃</button>
         <a href="mypage.php"><button>마이페이지</button></a>
         <?php
-        print '<div class="header">'.$id.' 님</div>';
+        
     }
-    else
+    else // 비로그인시 로그인 페이지로 이동
     {?>
         <meta http-equiv='refresh' content='0, login.html'>
         <?php
     }
     ?>
+    </span>
 </header>
 <hr>
 
@@ -255,32 +264,25 @@ $prev_block_page = $prev_block * $block_set; // 이전블럭 페이지번호
 $next_block_page = $next_block * $block_set - ($block_set - 1); // 다음블럭 페이지번호
 // 페이징 화면
 if(isset($key)) // 검색 키워드가 있을시
-{   print ($prev_page > 0) ? "<a href='".$_SERVER['PHP_SELF']."?search=$key&category=$category&page=$prev_page'>[이전]</a> " : "[이전] ";
-    print ($prev_block > 0) ? "<a href='".$_SERVER['PHP_SELF']."?search=$key&category=$category&page=$prev_block_page'>...</a> " : "... ";    
-}
+{   print ($prev_block > 0) ? "<a href='".$_SERVER['PHP_SELF']."?search=$key&category=$category&page=$prev_block_page'>[이전]</a> " : "[이전] ";   }
 else // 아니면
-{   print ($prev_page > 0) ? "<a href='".$_SERVER['PHP_SELF']."?category=$category&page=$prev_page'>[이전]</a> " : "[이전] ";
-    print ($prev_block > 0) ? "<a href='".$_SERVER['PHP_SELF']."?category=$category&page=$prev_block_page'>...</a> " : "... ";}
+{   print ($prev_block > 0) ? "<a href='".$_SERVER['PHP_SELF']."?category=$category&page=$prev_block_page'>[이전]</a> " : "[이전] ";   }
 
 for ($i=$first_page; $i<=$last_page; $i++) 
 {   if(isset($key)) // 검색 키워드가 있을시
     {   print ($i != $page) ? "<a href='".$_SERVER['PHP_SELF']."?search=$key&category=$category&page=$i'>$i</a> " : "<b>$i</b> ";   }
     else // 아니면
-    {   print ($i != $page) ? "<a href='".$_SERVER['PHP_SELF']."?category=$category&page=$i'>$i</a> " : "<b>$i</b> ";}
+    {   print ($i != $page) ? "<a href='".$_SERVER['PHP_SELF']."?category=$category&page=$i'>$i</a> " : "<b>$i</b> ";   }
     
 }
 if(isset($key)) // 검색 키워드가 있을시
-{   print ($next_block <= $total_block) ? "<a href='".$_SERVER['PHP_SELF']."?search=$key&category=$category&page=$next_block_page'>...</a> " : "... ";
-    print ($next_page <= $total_page) ? "<a href='".$_SERVER['PHP_SELF']."?search=$key&category=$category&page=$next_page'>[다음]</a>" : "[다음]";
-}
+{   print ($next_page <= $total_page) ? "<a href='".$_SERVER['PHP_SELF']."?search=$key&category=$category&page=$next_block_page'>[다음]</a>" : "[다음]";    }
 else // 아니면
-{   print ($next_block <= $total_block) ? "<a href='".$_SERVER['PHP_SELF']."?category=$category&page=$next_block_page'>...</a> " : "... ";
-    print ($next_page <= $total_page) ? "<a href='".$_SERVER['PHP_SELF']."?category=$category&page=$next_page'>[다음]</a>" : "[다음]";
-}
+{   print ($next_page <= $total_page) ? "<a href='".$_SERVER['PHP_SELF']."?category=$category&page=$next_block_page'>[다음]</a>" : "[다음]";    }
 
 ?>
 </span>
-<button onclick="location.href='insert.php'">글쓰기</button>
+<button onclick="location.href='insert.php'" class="info">글쓰기</button>
 </div>
 </body>
 </html>

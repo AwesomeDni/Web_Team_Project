@@ -1,5 +1,12 @@
 <?php session_start(); //세션 사용 ?> 
-<html><head><title>php test</title></head>
+<html>
+<head>
+    <title>글 수정</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <style>
+        #button{    float:right;    }
+    </style>
+</head>
 <body>
 <?php
 # DB연결 
@@ -21,12 +28,33 @@
     if($count<1)
     {   print "no have update data!<br>";   } //반환된 레코드가 없으면 출력
     else //있으면 실행
-    {   $row=$stmh->fetch(PDO::FETCH_ASSOC); //객체가 실행한 쿼리의 결과값 반환?>
+    {   $row=$stmh->fetch(PDO::FETCH_ASSOC); //객체가 실행한 쿼리의 결과값 반환
+    ?>
+    <div class="container">
+    <table class="table table-bordered">
+        <thead>
+            글수정
+        </thead>
+        <tbody>
         <FORM name="form1" method="post" action="update.php">
-            title:<INPUT type="text" name="title" value="<?=htmlspecialchars($row['title'])?>"><BR>
-            content:<textarea name="content" ><?=htmlspecialchars($row['content'])?></textarea><BR>
-            <INPUT type="submit" value="수정">
-        </FORM>
+            <tr>
+                <th>title: </th>
+                <td><INPUT class="form-control" type="text" name="title" value="<?=htmlspecialchars($row['title'])?>"></td>
+            </tr>
+            <tr>
+                <th>content: </th>
+                <td><textarea class="form-control" name="content" cols="50" rows="25"><?=htmlspecialchars($row['content'])?></textarea></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <INPUT class="pull-right" type="submit" value="수정" id="button">
+                    </FORM>
+                    <button onclick="location.href='list.php'">목록으로</button>
+                </td>
+                
+            </tr>
+        </tbody>
+    </table>
     <?php 
     } 
     ?>

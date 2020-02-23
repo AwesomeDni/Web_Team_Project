@@ -2,6 +2,10 @@
 <?php session_start(); ?>
 <link rel="stylesheet" href="css/bootstrap.css">
 <link rel="stylesheet" href="show.css">
+<style>
+    .category
+    {   position: absolute;   }
+</style>
 <header>
 <button id="main" onclick="location.href='main.php'">메인</button>
 <?php
@@ -14,7 +18,7 @@ if(isset($_SESSION['id']))
     <?php
     print '<div class="header">'.$id.' 님</div>';
 }
-else
+else // 로그인 상태가 아니면 로그인 페이지로 이동
 {   $id='';
 ?>
 	<meta http-equiv='refresh' content='0, login.html'>
