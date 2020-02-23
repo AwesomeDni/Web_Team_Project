@@ -6,10 +6,11 @@ $id=$_SESSION['id'];
 </head>
 <body>
     <!--내가 쓴글-->
-    <section>
+    <div class="list table table-bordered">
         <center>
+            <br>
             <h3>내가 쓴 글</h3>
-            <br><br><hr>
+            <br><br>
             <article>
                 <?php
                 # DB연결
@@ -67,40 +68,42 @@ $id=$_SESSION['id'];
                 }
                 ?>
                 </table>
+                <!-- 페이징 -->
+            <span class="paging">
                 <?php
-
                 // 페이지번호 & 블럭 설정
                 $first_page = (($block - 1) * $block_set) + 1; // 첫번째 페이지번호
                 $last_page = min ($total_page, $block * $block_set); // 마지막 페이지번호
-
                 $prev_page = $page - 1; // 이전페이지
                 $next_page = $page + 1; // 다음페이지
-
                 $prev_block = $block - 1; // 이전블럭
                 $next_block = $block + 1; // 다음블럭
-
                 // 이전블럭을 블럭의 마지막으로 하려면...
                 $prev_block_page = $prev_block * $block_set; // 이전블럭 페이지번호
                 // 이전블럭을 블럭의 첫페이지로 하려면...
                 //$prev_block_page = $prev_block * $block_set - ($block_set - 1);
                 $next_block_page = $next_block * $block_set - ($block_set - 1); // 다음블럭 페이지번호
-
                 // 페이징 화면
-                print ($prev_page > 0) ? "<a href='".$_SERVER['PHP_SELF']."?page=$prev_page'>[prev]</a> " : "[prev] ";
-                print ($prev_block > 0) ? "<a href='".$_SERVER['PHP_SELF']."?page=$prev_block_page'>...</a> " : "... ";
+                if(isset($key)) // 검색 키워드가 있을시
+                {   print ($prev_block > 0) ? "<a href='".$_SERVER['PHP_SELF']."?search=$key&category=$category&page=$prev_block_page'>[이전]</a> " : "[이전] ";   }
+                else // 아니면
+                {   print ($prev_block > 0) ? "<a href='".$_SERVER['PHP_SELF']."?category=$category&page=$prev_block_page'>[이전]</a> " : "[이전] ";   }
 
                 for ($i=$first_page; $i<=$last_page; $i++) 
-                {   print ($i != $page) ? "<a href='".$_SERVER['PHP_SELF']."?page=$i'>$i</a> " : "<b>$i</b> ";
+                {   if(isset($key)) // 검색 키워드가 있을시
+                    {   print ($i != $page) ? "<a href='".$_SERVER['PHP_SELF']."?search=$key&category=$category&page=$i'>$i</a> " : "<b>$i</b> ";   }
+                    else // 아니면
+                    {   print ($i != $page) ? "<a href='".$_SERVER['PHP_SELF']."?category=$category&page=$i'>$i</a> " : "<b>$i</b> ";   }
+                    
                 }
+                if(isset($key)) // 검색 키워드가 있을시
+                {   print ($next_page <= $total_page) ? "<a href='".$_SERVER['PHP_SELF']."?search=$key&category=$category&page=$next_block_page'>[다음]</a>" : "[다음]";    }
+                else // 아니면
+                {   print ($next_page <= $total_page) ? "<a href='".$_SERVER['PHP_SELF']."?category=$category&page=$next_block_page'>[다음]</a>" : "[다음]";    }
 
-                print ($next_block <= $total_block) ? "<a href='".$_SERVER['PHP_SELF']."?page=$next_block_page'>...</a> " : "... ";
-                print ($next_page <= $total_page) ? "<a href='".$_SERVER['PHP_SELF']."?page=$next_page'>[next]</a>" : "[next]";
                 ?>
-                </body>
-                </html>
-
-            </article>
-        </center>
-    </sction>
+            </span>
+            <button onclick="location.href='insert.php'" class="info">글쓰기</button>
+    </div>
 </body>
 </html>
