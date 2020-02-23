@@ -1,5 +1,6 @@
 <?php
 
+#join.html에서 post로 가져온 변수 할당
 $id=$_POST['id'];
 $pw=$_POST['pw'];
 $pwc=$_POST['pwc'];
@@ -11,24 +12,23 @@ $pdo=DB_conn();
 #비밀번호와 비밀번호 재확인이 같지 않으면 에러, 맞으면 암호 복호화
 if($pw != $pwc)
 {
-    print "비밀번호와 비밀번호 재확인이 일치하지 않습니다.";
-    print "<a href=join.html>돌아가기</a>";
-    exit();
+    print "<script>alert('비밀번호와 비밀번호 재확인이 일치하지 않습니다.');</script>";
+    print "<script>location.href='join.html';</script>";
 }
 else
 {
     $pw = crypt($pw,crypt($pw,'abc'));
+    //비밀번호를 'abc'라는 문자열을 salt값으로 암호화하고, 그 값을 salt값으로 다시 암호화
 }
 
 
 #빈칸이 있을 경우
 if($id==NULL || $pw==NULL || $email==NULL){ 
-    print "빈 칸을 모두 채워주세요.";
-    print "<a href=join.html>돌아가기</a>";
-    exit();
+    print "<script>alert('빈 칸을 모두 채워주세요.');</script>";
+    print "<script>location.href='join.html';</script>";
 }
 
-#아이디 중복확인
+#아이디 중복확인($countID에 결과 담김)
 try{
     $sql="SELECT * FROM user_tb where id=:id";
     $stmh=$pdo->prepare($sql);
@@ -39,7 +39,7 @@ try{
    print 'error:'.$Exception->getMessage();
 }
 
-#이메일 중복확인
+#이메일 중복확인($countEmail에 결과 담김)
 try{
     $sql="SELECT * FROM user_tb WHERE email=:email";
     $stmh=$pdo->prepare($sql);
@@ -75,7 +75,7 @@ if($id=='admin'){
     }catch(PDOException $Exception){
         $pdo->rollBack();
         print 'error:'.$Exception->getMessage();
-        print "<a href=main.php>홈으로</a>";
+        print "<a href=main.php><button>홈으로</button></a>";
      } 
 }
 

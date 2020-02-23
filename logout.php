@@ -9,5 +9,7 @@ foreach ( $_COOKIE as $key => $value )
 if($reset){
     header('location: ./main.php'); 
     //세션지워서 로그아웃 성공하면 메인페이지로
-    //메인페이지에서는 세션 없으면 로그인화면으로 감
+}else{
+    print "<script>alert('세션정보 삭제에 실패. 관리자에게 문의해주세요.');</script>";
+    print "<script>location.href='main.php';</script>";
 }
