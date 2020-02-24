@@ -17,14 +17,16 @@
         <link rel="stylesheet" href="css/bootstrap.css">
         <script src="http://code.jquery.com/jquery.js"></script>
         <style>
-        li{list-style: none;}
-        a:hover{color:black; text-decoration: none;}
-        .user{
-            float: left; border-right:1px solid black; 
-            height: 100%; width: 20%;
-            }
-        .category{float: auto; 
-            height: 100%; width: 100%;}
+            li{list-style: none;}
+            a:hover{color:black; text-decoration: none;}
+            .user{
+                float: left; border-right:1px solid black; 
+                height: 100%; width: 20%;
+                }
+            .category{float: auto; 
+                height: 100%; width: 100%;}
+                @font-face{font-family:'A프로젝트'; src:url('A프로젝트.woff'); }
+            body{font-family:'A프로젝트';}
         </style>
     </head>
     <body>
