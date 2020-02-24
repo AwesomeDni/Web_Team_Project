@@ -16,7 +16,18 @@
     
     <style>
         li { list-style: none; text-align: center; margin-right: 15px;}
-        a:hover{color:black; text-decoration: none;}
+        a:hover{color:black; text-decoration: none;
+                animation-duration: 3s; animation-name: rainbowLink; animation-iteration-count: infinite; } 
+                @keyframes rainbowLink {     
+                0% { color: #ff2a2a; }
+                15% { color: #ff7a2a; }
+                30% { color: #ffc52a; }
+                45% { color: #43ff2a; }
+                60% { color: #2a89ff; }
+                75% { color: #202082; }
+                90% { color: #6b2aff; } 
+                100% { color: #e82aff; }
+            }
         .li{margin-left: auto; margin-right: auto;}
         .user{
             float: left; border-right:1px solid black; 
@@ -24,7 +35,9 @@
             }
         .list{float: auto; 
             height: 100%; width: 100%;}
-        .nav-item{margin-left:430px;}
+        .nav-item{margin-left:380px;}
+        @font-face{font-family:'A프로젝트'; src:url('A프로젝트.woff'); }
+        body{font-family:'A프로젝트';}
     </style>
 </head>
 <body>
@@ -73,9 +86,7 @@
                 <center>
                     <br>
                     <span class="active">★<?=$id?>님★</span> <!--'접속중인 유저의 id'+'님' 이라고 출력됨-->
-                    <br><br><hr>
-                    <span><a href="#list">내가 쓴 글</a></span> <!--#list에서 적은 글 리스트 갖고옴-->
-                    <br><br>
+                    <br><hr>
                     <span class="out">
                         <button class="btn btn-primary" onclick="location.href='logout.php'">로그아웃</button> <!--누르면 logout.php로 이동함-->
                         <br>
