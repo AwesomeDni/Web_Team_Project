@@ -17,7 +17,7 @@ while($row=$stt->fetch(PDO::FETCH_ASSOC)){
     $id=$row['id'];
 }
 
-if(!isset($id)){
+if(!isset($_SESSION['id'])){
     echo "<script>window.alert('로그인 후 이용해주세요.');location.href='login.html';</script>";
 }
 
@@ -33,7 +33,7 @@ else{
         print "error:".$Exception->getMessage();  
     }
 
-    if($stmh){
+    if($count){
         echo "<script> window.alert('댓글 삭제 성공!'); location.href='show.php?content_no={$cno}';</script>";
     }
     else{
