@@ -30,6 +30,9 @@ if(isset($_POST['check']))
         echo "<script> alert('삭제 실패'); </script>";
     }
 }
+elseif($_SESSION['id'] != $writer){
+    echo "<script> alert('잘못된 접근 입니다.'); </script>";
+}
 # show.php에서 삭제시
 elseif(isset($_SESSION['content_no']))
 {   $cno = $_SESSION['content_no'];
