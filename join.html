@@ -5,14 +5,23 @@
 <meta http-equiv="content-type" content="txt/html" ; charset="utf-8">
 <link rel="stylesheet" href="css/bootstrap.css">
 <link rel="stylesheet" href="user.css">
+    <style>
+        @font-face{ font-family:'A프로젝트'; 
+                    src:url('A프로젝트.woff'); }
+        @font-face{ font-family:'A펜글씨B'; 
+                    src:url('A펜글씨B.woff');}
+        body{font-family:'A프로젝트';}
+        form{font-family:'A펜글씨B';background-image: url('flower.jpeg');}
+        div#outer { padding: 100px 0px;}
+    </style>
 </head>
 <body>
 <div class ="container">
 <a href="main.php"><button class="btn btn-primary "> 홈으로 </button></a><br>
-<div class="d-flex justify-content-center">
+<div class="d-flex justify-content-center" id ="outer" >
 <div class="bg-light">
     <form name="join_form" method="POST" action="join.php">
-        <div><h2>회원가입</h2></div>
+        <div class="font"><h2>회원가입</h2></div>
         <div>
             <input type="text" class="form-control-lg" name="id" placeholder="Username" autocomplete="off">
         </div>
