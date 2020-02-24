@@ -212,7 +212,7 @@ else // 로그인 상태가 아니면 로그인 페이지로 이동
             <TD colspan="3"><?=$writer=$row['id']?></TD>
         </TR>
         <TR>
-            <TD colspan="3"><?=nl2br($row['content'])?></TD>
+            <TD colspan="3"><pre><?=htmlspecialchars($row['content'])?></pre></TD>
         </TR>
     <?php 
     }

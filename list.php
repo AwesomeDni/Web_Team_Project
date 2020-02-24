@@ -58,8 +58,6 @@
 <!-- 카테고리 바-->
 <div class='category'>
     <div class="panel panel-info">
-        <div class="panel-heading">
-        </div>
         <ul class="list group">
             <a href="list.php?category=0"><li><b>전체글보기</b></li></a>
             <?php
@@ -222,7 +220,7 @@
     ## 관리자면 체크박스 표시
     if($power==0)
     {?>
-        <table border=1 class='table table-bordered'>
+        <table border=1 class='table table-bordered table-sm'>
             <tr align="center">
                 <td>선택</td><td>글번호</td><td>제목</td><td>작성자</td><td>작성일</td><td>조회수</td>
             </tr>
@@ -244,7 +242,7 @@
     ## 아니면
     else
     {?>
-        <table border=1 class='table table-bordered'>
+        <table border=1 class='table table-bordered table-sm'>
             <tr align="center">
                 <td>글번호</td><td>제목</td><td>작성자</td><td>작성일</td><td>조회수</td>
             </tr>
