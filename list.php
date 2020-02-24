@@ -59,7 +59,6 @@
 <div class='category'>
     <div class="panel panel-info">
         <div class="panel-heading">
-            <h3 class="panel-title"></h3>
         </div>
         <ul class="list group">
             <a href="list.php?category=0"><li><b>전체글보기</b></li></a>
