@@ -5,11 +5,20 @@
     <title>login page</title>
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="user.css">
+    <style>
+        @font-face{ font-family:'A프로젝트'; 
+                    src:url('A프로젝트.woff'); }
+        @font-face{ font-family:'A펜글씨B'; 
+                    src:url('A펜글씨B.woff');}
+        body{font-family:'A프로젝트';}
+        form{font-family:'A펜글씨B';} 
+        div#outer { padding: 200px 0px;}
+    </style>
 </head>
 <body>
-<div class ="container">
+<div class ="container" >
 <a href="main.php"><button class="btn btn-primary "> 홈으로 </button></a><br>
-<div class="d-flex justify-content-center">
+<div class="d-flex justify-content-center" id ="outer">
 <div class="bg-light">
     <form name="join_form" method="POST" action="login.php">
         <div><h2>로그인</h2></div>
