@@ -38,6 +38,9 @@
         .nav-item{margin-left:380px;}
         @font-face{font-family:'A프로젝트'; src:url('A프로젝트.woff'); }
         body{font-family:'A프로젝트';}
+        @font-face{font-family:'A펜글씨B'; src:url('A펜글씨B.woff');}
+        .catename
+        {font-family:'A펜글씨B';}
     </style>
 </head>
 <body>
@@ -51,8 +54,10 @@
     </div>
     <hr>
     <span class='category'>
-    <center>
-        <h7>▼카테고리 선택▼</h7><br>
+        <div class="catename">
+        <center>
+            <h7>▼카테고리 선택▼</h7><br>
+        </div>
     <ul>
         <ul class="nav">
             <li class="nav-item">
@@ -102,9 +107,11 @@
             header('location: ./main.php'); //자동으로 main.php 로 이동함.
         }
     ?>
+    <div class="list">
     <?php
     //내가 쓴 글
         include 'mypagelist.php'; //mypagelist.php 의 내용을 갖고옴 
     ?>
+    </div>
 </body>
 </html> 
