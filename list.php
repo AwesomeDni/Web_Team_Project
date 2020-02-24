@@ -7,16 +7,18 @@
     <link rel="stylesheet" href="list.css">
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <style>
-    .info
-    {   float: right;   }
-    .search
-    {   float: right;   }
-    .category
-    {   position: absolute;   }
-    .paging
-    {   position: relative;
-        left: 40%;
-    }
+        .content
+        {   width: 75%;   }
+        .info
+        {   float: right;   }
+        .search
+        {   float: right;   }
+        .category
+        {   position: absolute;   }
+        .paging
+        {   position: relative;
+            left: 40%;
+        }
     </style>
 </head>
 <body>
@@ -67,7 +69,7 @@
 </ul>
 </div>
 
-<div class="container">
+<div class="container content">
 <h3>전체글</h1>
 <!-- 검색 창 -->
 <div class="search">
