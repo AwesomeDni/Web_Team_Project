@@ -6,8 +6,8 @@ $cno =$_GET['content_no'];
 <!-- 댓글입력창!-->
 <form action="replyinsert.php" method="post">
     <input type="hidden" name="content_no" value="<?=$cno?>">
-    <textarea name="coment" rows="8" cols="80"></textarea>
-    <input type="submit" value="댓글쓰기">
+    <textarea class="form-control" name="coment" rows="3"></textarea>
+    <input class="button" type="submit" value="댓글쓰기">
 </form>
 
 <?php
@@ -22,36 +22,36 @@ catch(PDOException $e){
     print 'err: '. $e->getMessage();
     $dbo->rollBack();
 }
-
+?>
+<?php
 $id=$_SESSION['id'];
 while($coment_row=$coment_stt->fetch(PDO::FETCH_ASSOC))
 {?>
-    <table>
-        <tr>
-            <td>작성자</td>
-            <td><?=$writer=$coment_row['id']?></td>
-        </tr>
-        <tr>
-            <td>내용</td>
-            <td><?=$coment_row['coment']?></td>
-        </tr>
-        <tr>
-            <td>날짜</td>
-            <td><?=$coment_row['write_dt']?></td>
-        </tr>
-    </table>
-    <?php
-        if($id==$writer){//글 작성자만 수정 및 삭제 가능
-        ?>
-        <button onclick="location.href='replyupdate.php?coment_no=<?=$coment_row['coment_no']?>'">수정</button>
-        <button onclick="location.href='replydelete.php?coment_no=<?=$coment_row['coment_no']?>'">삭제</button>
-        <?php
-        }
-        # 관리자면 글 삭제 가능
-        else if(isset($_SESSION['admin'])){
-        ?>
-        <button onclick="location.href='replydelete.php?coment_no=<?=$coment_row['coment_no']?>'">삭제</button>
-        <?php
-        }
-    }
+<table class="table table-borderless table-sm">
+    <tr>
+        <td width="85%"><?=$writer=$coment_row['id']?> &emsp;|&emsp; <?=$coment_row['write_dt']?></td>
+        <td>
+            <?php
+            if($id==$writer){//글 작성자만 수정 및 삭제 가능
+            ?>
+            <button onclick="location.href='replyupdate.php?coment_no=<?=$coment_row['coment_no']?>'">수정</button>
+            <button onclick="location.href='replydelete.php?coment_no=<?=$coment_row['coment_no']?>'">삭제</button>
+            <?php
+            }
+            # 관리자면 글 삭제 가능
+            else if(isset($_SESSION['admin'])){
+            ?>
+            <button onclick="location.href='replydelete.php?coment_no=<?=$coment_row['coment_no']?>'">삭제</button>
+            <?php
+            }
+            ?>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"><?=nl2br($coment_row['coment'])?></td>
+    </tr>
+</table>
+<hr>
+<?php
+}
 ?>

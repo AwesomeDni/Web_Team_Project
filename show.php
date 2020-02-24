@@ -3,8 +3,14 @@
 <link rel="stylesheet" href="css/bootstrap.css">
 <link rel="stylesheet" href="show.css">
 <style>
+    .button
+    {   float: right;   }
+    .content, .reply
+    {   width: 75%;   }
     .category
     {   position: absolute;   }
+    textarea
+    {   resize: none;}
 </style>
 <header>
 <button id="main" onclick="location.href='main.php'">메인</button>
@@ -52,7 +58,7 @@ else // 로그인 상태가 아니면 로그인 페이지로 이동
 </ul>
 </div>
 <!-- 메인 글-->
-<div class="container">
+<div class="container content">
 <?php
 #사용자가 요청한 문서 번호 획득
 $_SESSION['content_no'] = $content_no = $_GET['content_no'];
@@ -177,7 +183,7 @@ $writer='';//작성자 저장하기 위한 변수
 while($row=$stmh->fetch(PDO::FETCH_ASSOC))//PDO::FETCH_ASSOC 결과값을 한 행씩 읽어오는 메소드
 {?>
     <TR>
-        <TD width="800px"><?=$row['title']?></TD>
+        <TD width="70%"><?=$row['title']?></TD>
         <TD><?=$row['category_nm']?></TD>
         <TD><?=$row['write_dt']?></TD>
     </TR>
@@ -198,16 +204,14 @@ if($writer=="") {
 ?>
 </TBODY>
 </TABLE>
-</div>
-<div class="container">
 <footer>
 <button onclick="location.href='list.php'">목록 보기</button>
-<button onclick="location.href='insert.php'">글쓰기</button>
+<button class="button" onclick="location.href='insert.php'">글쓰기</button>
 <?php
 if($id==$writer)//글 작성자만 수정 및 삭제 가능
 {?>
-    <button onclick="location.href='updateForm.php'">수정</button>
-    <button onclick="location.href='delete.php'">삭제</button>
+    <button class="button" onclick="location.href='updateForm.php'">수정</button>
+    <button class="button" onclick="location.href='delete.php'">삭제</button>
 <?php
 }
 # 관리자면 글 삭제 가능
@@ -215,14 +219,14 @@ if(isset($_SESSION['admin']))
 {   if($writer=='admin'){}
     else{
 ?>
-    <button onclick="location.href='delete.php'">삭제</button>
+    <button class="button" onclick="location.href='delete.php'">삭제</button>
 <?php
     }
 }
 ?>
 </div>
 <br><br>
-<div class="container">
+<div class="container reply">
 <?php require_once('reply.php'); ?>
 </div>
 </footer>
