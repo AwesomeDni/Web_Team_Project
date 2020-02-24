@@ -1,0 +1,35 @@
+    body { 
+        text-align: center;
+        font-family: Arial, Helvetica, sans-serif;
+        font-style: normal;
+    }
+    div.welcom{
+        font-family: "Times New Roman", Times, serif;
+        font-style: oblique;
+    }
+    .layer{
+        position:absolute;
+        top:38%;
+        left:38%;
+        width:auto;
+        height:auto;
+        padding:20px;
+    }
+    .covervid-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    }
+    @font-face{font-family:'A펜글씨B'; src:url('A펜글씨B.woff');}
+    .bg-light{
+        overflow:hidden;
+        width: auto; 
+        border-radius: 10px;
+        padding: 25px; 
+        background-color: #ffffff;
+        opacity: 0.5;
+        font-weight: bold;
+        font-family:'A펜글씨B';
+    }
