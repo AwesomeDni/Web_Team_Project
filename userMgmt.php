@@ -4,6 +4,8 @@
     <style>
         a {text-decoration:none; }
         td {text-align:center;}
+        @font-face{font-family:'A타이틀고딕2'; src:url('A타이틀고딕2.woff');} 
+        .container{font-family:'A타이틀고딕2';}
     </style>
     <link rel="stylesheet" href="css/bootstrap.css">
 </head>

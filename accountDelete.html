@@ -23,7 +23,7 @@
 <a href="main.php"><button class="btn btn-primary "> 홈으로 </button></a><br>
 <div class="d-flex justify-content-center">
 <div class="bg-light">
-    <form name="join_form" method="POST" action="login.php">
+    <form name="join_form" method="POST" action="accountDelete.php">
         <div><h2>회원탈퇴</h2></div>
         <div>
             <input type="text" class="form-control-lg" name="id" placeholder="Username" autocomplete="off">
@@ -32,7 +32,7 @@
             <input type="password" class="form-control-lg" name="pw" placeholder="Password" minlength="4" maxlength="8"  autocomplete="off">
         </div>
         <div>
-            <input type="email" class="form-control-lg" name="email"  placeholder="E-mail">
+            <input type="email" class="form-control-lg" name="email"  placeholder="E-mail" autocomplete="off">
         </div>
         <input type="hidden" name="delete" id="delete" value="default">
         <div>
