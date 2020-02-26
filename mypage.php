@@ -6,7 +6,7 @@
     require_once("db_conn.php"); /*db연결을 위해 db.conn을 불러온다.*/
     $pdo = DB_conn(); /*db와 연결한다.*/
     $id=$_SESSION['id']; /*db와 연결한다.*/
-?>
+    $categorty?>
 <html>
 <head>
     <title>mypage</title>
@@ -110,8 +110,124 @@
     <div class="list">
     <?php
     //내가 쓴 글
-        include 'mypagelist.php'; //mypagelist.php 의 내용을 갖고옴 
-    ?>
+# DB연결
+$pdo = DB_conn();
+$id=$_SESSION['id'];
+?>
+<style>
+    @font-face{font-family:'A타이틀고딕2'; src:url('A타이틀고딕2.woff');} 
+    .list
+    {font-family:'A타이틀고딕2';}
+    @font-face{font-family:'A펜글씨B'; src:url('A펜글씨B.woff');}
+    .name
+    {font-family:'A펜글씨B';}
+</style>
+</head>
+<body>
+    <!--내가 쓴글-->
+    <div class="list table table-bordered">
+        <center>
+            <div class="name">
+                <br>
+                <h3>내가 쓴 글</h3>
+            </div>
+            <br><br>
+            <article>
+                <?php
+                    //총 데이터의 수 
+                    try {
+                        $query="SELECT content_no as total FROM list_view ORDER BY content_no DESC ";
+                        $stmh=$pdo->prepare($query);
+                        $stmh->execute();
+                    } catch (PDOException $exception) {
+                        print '에러1:'.$exception->getMessage();
+                    }
+                    $row=$stmh->fetch(PDO::FETCH_ASSOC);
+                    $total = $row['total']; // 전체글수
+                    
+                    $page=''; //현재 페이지
+                    if(isset($_GET['page'])){    $page= $_GET['page'];    } //현재 페이지(넘어온값)
+                    $list=10; // 한 페이지에 표시되는 줄 수 
+                    $block=4; // 나타날 블럭수
+
+                    $total_page=ceil($total/$list); //총 페이지=반올림(전체글수/한 페이지에 나오는 갯수)
+                    $total_block=ceil($total_page/$block); //총 블럭=반올림(총 페이지/나타날 블럭 수)
+                    $now_block=ceil($page/$block); //현재 블럭=반올림(현재 페이지/나타날 블럭 수)
+
+                    $start_page=($now_block*$block)-($block-1); //시작페이지 
+                    if($start_page<=1){$start_page=1;}
+                    $end_page=$now_block*$block; //마지막 페이지 
+                    if($total_page<=$end_page){$end_page=$total_page;}
+
+                    $limit_idx = ($page - 1) * $list; // limit 시작 위치
+
+                    $prev_page = $page - 1; // 이전페이지
+                    
+                    $next_page = $page + 1; // 다음페이지
+
+                    $prev_block = $block - 1; // 이전블럭
+                    $next_block = $block + 1; // 다음블럭
+                    if($next_page>=$total_page){
+                        $next_page=$total_page;
+                    }
+
+                    //이전 블럭을 누르면 항목중 가장 첫번째 작은 수(첫번째 항목)으로 나오게 함  
+                    $prev_block_page=$prev_block*$block-($block + 1 ); // 이전블럭 페이지 번호 
+                    $next_block_page=$next_block*$block-($block - 1); // 다음블럭 페이지 번호 
+
+                ?>
+
+                <!--페이징-->
+                    <div>
+                        <?php
+                        //이전 페이지
+                        echo ($prev_page>0)?"<a href='".$_SERVER['PHP_SELF']."?page=$prev_page'>[이전 페이지로]</a>":"";
+                        //현재 보는 중인 페이지 
+                        for ($i=$start_page; $i<=$end_page; $i++){ //1,2,3 같은 페이지 번호 나오는 곳 
+                            echo($i!=$page)?"<a href='".$_SERVER['PHP_SELF']."?page=$i'>$i</a>":"<b>$i</b>";
+                        }
+                        //다음 페이지\
+                        echo ($prev_page>=0)?"<a href='".$_SERVER['PHP_SELF']."?page=$next_page'>[다음 페이지로]</a>":"[다음]";
+                        //echo ($prev_page>0)?"<a href='".$_SERVER['PHP_SELF']."?page=$next_page'>[다음 페이지로]</a>":"[다음]";
+                        ?>
+                    </div>
+                    <?php
+
+                    ?>
+
+                <?php
+                # 게시글 불러오기
+                try
+                {   //쿼리문 작성
+                    $query = "SELECT content_no, title, view_cnt, category_nm FROM show_view WHERE id='$id' limit $limit_idx,$list;";
+                    //SELECT content_no,title,id,view_cnt from show_view order by content_no desc limit $limit_idx, $page_set";
+                    $stmh=$pdo->prepare($query); //sql문을 인잭션으로 부터 보호하기위한 처리
+                    $stmh->execute();
+                }
+                catch(PDOException $e)
+                {   print 'err: '. $e->getMessage();   }
+                ?>
+                    <table border=1>
+                        <tr align="center">
+                        <td>카테고리</td><td>글번호</td><td>제목</td><td>조회수</td>
+                        </tr>
+                    <?php
+                # 게시글 리스트 출력
+                    while($row=$stmh->fetch(PDO::FETCH_ASSOC))
+                    {   print "<tr>";
+                        print "<td align=center>".$row['category_nm']."</td>";
+                        print "<td align=center>" . $row['content_no'] . "</td>";
+                        print "<td width=500px><a href='show.php?content_no=". $row['content_no'] ."'>" . $row['title'] . "</a></td>";
+                        print "<td align=center>".$row['view_cnt']."</td>";
+                        print "</tr>";
+                    }
+                    ?>
+                    </table>
+                    <?php
+
+                    ?>
+            </article>
+        </center>
     </div>
 </body>
 </html> 
