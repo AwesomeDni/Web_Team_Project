@@ -6,7 +6,7 @@
     require_once("db_conn.php"); /*db연결을 위해 db.conn을 불러온다.*/
     $pdo = DB_conn(); /*db와 연결한다.*/
     $id=$_SESSION['id']; /*db와 연결한다.*/
-    $categorty?>
+    ?>
 <html>
 <head>
     <title>mypage</title>
@@ -136,44 +136,43 @@ $id=$_SESSION['id'];
                 <?php
                     //총 데이터의 수 
                     try {
-                        $query="SELECT content_no as total FROM list_view ORDER BY content_no DESC ";
+                        $query="SELECT count(content_no) as total FROM show_view ";
                         $stmh=$pdo->prepare($query);
                         $stmh->execute();
                     } catch (PDOException $exception) {
                         print '에러1:'.$exception->getMessage();
                     }
+
                     $row=$stmh->fetch(PDO::FETCH_ASSOC);
                     $total = $row['total']; // 전체글수
-                    
-                    $page=''; //현재 페이지
+                    $page=1; //현재 페이지
                     if(isset($_GET['page'])){    $page= $_GET['page'];    } //현재 페이지(넘어온값)
-                    $list=10; // 한 페이지에 표시되는 줄 수 
-                    $block=4; // 나타날 블럭수
+                    //$page=1; //현재 페이지
+                    $page_set=10; // 한 페이지에 표시되는 줄 수 
+                    $block_set=4; // 나타날 블럭수
 
-                    $total_page=ceil($total/$list); //총 페이지=반올림(전체글수/한 페이지에 나오는 갯수)
-                    $total_block=ceil($total_page/$block); //총 블럭=반올림(총 페이지/나타날 블럭 수)
-                    $now_block=ceil($page/$block); //현재 블럭=반올림(현재 페이지/나타날 블럭 수)
+                    $total_page=ceil($total/$page_set); //총 페이지=반올림(전체글수/한 페이지에 나오는 갯수)
+                    $total_block=ceil($total_page/$block_set); //총 블럭=반올림(총 페이지/나타날 블럭 수)
+                    $now_block=ceil($page/$block_set); //현재 블럭=반올림(현재 페이지/나타날 블럭 수)
 
-                    $start_page=($now_block*$block)-($block-1); //시작페이지 
+                    $start_page=($now_block*$block_set)-3; //시작페이지 
                     if($start_page<=1){$start_page=1;}
-                    $end_page=$now_block*$block; //마지막 페이지 
+                    $end_page=$now_block*$block_set; //마지막 페이지 
                     if($total_page<=$end_page){$end_page=$total_page;}
 
-                    $limit_idx = ($page - 1) * $list; // limit 시작 위치
+                    $limit_idx = ($page - 1) * $page_set; // limit시작위치
+                    $prev_page=$page - 1; // 이전페이지
+                    $next_page=$page + 1; // 다음페이지
 
-                    $prev_page = $page - 1; // 이전페이지
-                    
-                    $next_page = $page + 1; // 다음페이지
-
-                    $prev_block = $block - 1; // 이전블럭
-                    $next_block = $block + 1; // 다음블럭
+                    $prev_block = $block_set - 1; // 이전블럭
+                    $next_block = $block_set + 1; // 다음블럭
                     if($next_page>=$total_page){
                         $next_page=$total_page;
                     }
 
                     //이전 블럭을 누르면 항목중 가장 첫번째 작은 수(첫번째 항목)으로 나오게 함  
-                    $prev_block_page=$prev_block*$block-($block + 1 ); // 이전블럭 페이지 번호 
-                    $next_block_page=$next_block*$block-($block - 1); // 다음블럭 페이지 번호 
+                    //$prev_block_page=$prev_block*$block-($block + 1 ); // 이전블럭 페이지 번호 
+                    //$next_block_page=$next_block*$block-($block - 1); // 다음블럭 페이지 번호 
 
                 ?>
 
@@ -199,7 +198,7 @@ $id=$_SESSION['id'];
                 # 게시글 불러오기
                 try
                 {   //쿼리문 작성
-                    $query = "SELECT content_no, title, view_cnt, category_nm FROM show_view WHERE id='$id' limit $limit_idx,$list;";
+                    $query = "SELECT content_no, title, view_cnt, category_nm FROM show_view WHERE id='$id' limit $limit_idx,$page_set";
                     //SELECT content_no,title,id,view_cnt from show_view order by content_no desc limit $limit_idx, $page_set";
                     $stmh=$pdo->prepare($query); //sql문을 인잭션으로 부터 보호하기위한 처리
                     $stmh->execute();
