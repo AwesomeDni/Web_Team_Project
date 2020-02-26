@@ -136,7 +136,7 @@ $id=$_SESSION['id'];
                 <?php
                     //총 데이터의 수 
                     try {
-                        $query="SELECT count(content_no) as total FROM show_view ";
+                        $query="SELECT count(content_no) as total FROM show_view WHERE id='$id'  ";
                         $stmh=$pdo->prepare($query);
                         $stmh->execute();
                     } catch (PDOException $exception) {
@@ -157,8 +157,9 @@ $id=$_SESSION['id'];
 
                     $start_page=($now_block*$block_set)-3; //시작페이지 
                     if($start_page<=1){$start_page=1;}
-                    $end_page=$now_block*$block_set; //마지막 페이지 
-                    if($total_page<=$end_page){$end_page=$total_page;}
+                    //$end_page= min ($total_page, $now_block * $block_set); //마지막 페이지 
+                    $last_page = min ($total_page, $now_block * $block_set); // 마지막 페이지번호
+                    if($total_page<=$last_page){$last_page=$total_page;}
 
                     $limit_idx = ($page - 1) * $page_set; // limit시작위치
                     $prev_page=$page - 1; // 이전페이지
@@ -182,7 +183,7 @@ $id=$_SESSION['id'];
                         //이전 페이지
                         echo ($prev_page>0)?"<a href='".$_SERVER['PHP_SELF']."?page=$prev_page'>[이전 페이지로]</a>":"";
                         //현재 보는 중인 페이지 
-                        for ($i=$start_page; $i<=$end_page; $i++){ //1,2,3 같은 페이지 번호 나오는 곳 
+                        for ($i=$start_page; $i<=$last_page; $i++){ //1,2,3 같은 페이지 번호 나오는 곳 
                             echo($i!=$page)?"<a href='".$_SERVER['PHP_SELF']."?page=$i'>$i</a>":"<b>$i</b>";
                         }
                         //다음 페이지\
@@ -198,7 +199,7 @@ $id=$_SESSION['id'];
                 # 게시글 불러오기
                 try
                 {   //쿼리문 작성
-                    $query = "SELECT content_no, title, view_cnt, category_nm FROM show_view WHERE id='$id' limit $limit_idx,$page_set";
+                    $query = "SELECT content_no, title, view_cnt, category_nm FROM show_view WHERE id='$id' ORDER BY content_no limit $limit_idx,$page_set";
                     //SELECT content_no,title,id,view_cnt from show_view order by content_no desc limit $limit_idx, $page_set";
                     $stmh=$pdo->prepare($query); //sql문을 인잭션으로 부터 보호하기위한 처리
                     $stmh->execute();
