@@ -11,36 +11,39 @@ http://juhye9663.ohseon.com/
 
 
 # 참여자
+```
 AwesomeDni 
 hyejin-kim1108
 juhye963
 sdi9429
+```
 
 
 # 개발환경
-## 운영체재 : windows
-## 서버 : xampp (v3.2.4), Apache
-## 개발 언어 : php(v7.2.26), html, css, js, jquery, bootstrap
-## DB : mysql(v5.7)
-## 호스팅: 오선호스팅
-## 형상관리도구 : Git-hub
+```
+운영체제 : windows
+서버 : xampp (v3.2.4), Apache
+개발 언어 : php(v7.2.26), html, css, js, jquery, bootstrap
+DB : mysql(v5.7)
+호스팅: 오선호스팅
+형상관리도구 : Git-hub
+```
 
 
 # 구현한 기능( 구현한 사람)
-
-## 유저
 ```
+## 유저
 Create (hyejin-kim1108, juhye963)
 Read   (hyejin-kim1108, juhye963)
 Delete (juhye963)
-```
+
 ## 인증
-```
+
 로그인   (hyejin-kim1108, juhye963, AwesomeDni)
 로그아웃 (hyejin-kim1108, juhye963)
-```
+
 ## 게시글
-```
+
 Create          (AwesomeDni)
 Read            (AwesomeDni)
 Update          (AwesomeDni)
@@ -49,16 +52,16 @@ Delete          (sdi9429,AwesomeDni)
 카테고리별 분류   (AwesomeDni)
 페이징           (AwesomeDni)
 이전,다음글 버튼  (AwesomeDni)
-```
+
 ## 댓글
-```
+
 Create   (sdi9429)
 Read     (sdi9429)
 Updater  (sdi9429)
 Delete   (sdi9429)
-```
+
 ## 관리자권한
-```
+
 유저 관리 조건별 검색 (juhye963)
 유저 관리 Read       (juhye963)
 유저 관리 delete     (juhye963)
@@ -68,15 +71,16 @@ Delete   (sdi9429)
 카테고리 관리 Create (hyejin-kim1108)
 카테고리 관리 Read   (hyejin-kim1108)
 카테고리 관리 Delete (hyejin-kim1108)
-```
+
 ## 마이페이지
-```
+
 페이징             (hyejin-kim1108)
 자신이 쓴 글 보기   (hyejin-kim1108)
 ```
 
 
 # 진행과정
+```
 01.18 : 게시글 create, read
 01.31 : 회원가입, 로그인 - 초기페이지 구성 (sqlli_conn 이용한 문법 위주로 사용, 추후 PDO 문법으로 수정)
 02.03 : 회원탈퇴(폼과 기본적인 기능의 틀),게시글 이전,다음글 버튼/ 게시글 조회수/ 로그아웃 쿠키 지우기, 게시글 삭제 기능구현
@@ -106,7 +110,7 @@ Delete   (sdi9429)
         전체적인 페이지(메인 동영상,로그인,게시판 등..) CSS 수정 
         메인의 동영상은 제이쿼리 라이브러리 사용 
         마이페이지 
-
+```
 
 
 
